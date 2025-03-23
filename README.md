@@ -5,4 +5,4 @@
 - Oscar Valverde  (202173623-9)
 - **Tutor:** Eduardo Pino
 ### Enlaces relevantes:
-*  [Repositorio Analisis y diseño de software.]()  <-AGREGAR ENLACE
+*  [Repositorio Analisis y diseño de software.](https://github.com/Blindas31/GRUPO5-2024-PROYINF) 
