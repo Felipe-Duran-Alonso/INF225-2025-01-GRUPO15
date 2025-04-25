@@ -9,7 +9,7 @@
 
 ### Pasos a seguir para la ejecucion de la [ultima version]() :
 
-1. Abrir la terminal en la ubicación del [archivo]() del proyecto.
+1. Abrir la terminal en la ubicación del [archivo](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/blob/8650cd8786d4b3556be2476ea9d79da2926e189d/mainHito1.zip) del proyecto.
 2. En caso de usar virtualenv escribir "source venv/Scripts/activate", para MacOS y Linux. "venv\Scripts\activate" para Windows.
 3. Escribir "python manage.py runserver" (en caso de que no funcioné escribir "python3 manage.py runserver").
 4. En la terminal se indicara la url de la página web normalmente "http://127.0.0.1:8000/".
