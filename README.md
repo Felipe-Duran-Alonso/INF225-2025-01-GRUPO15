@@ -13,9 +13,3 @@
 2. En caso de usar virtualenv escribir "source venv/Scripts/activate", para MacOS y Linux. "venv\Scripts\activate" para Windows.
 3. Escribir "python manage.py runserver" (en caso de que no funcioné escribir "python3 manage.py runserver").
 4. En la terminal se indicara la url de la página web normalmente "http://127.0.0.1:8000/".
-
-Con el fin de testear las modificaciones en la base de datos se recomienda el uso de "http://127.0.0.1:8000/admin". A su vez las siguientes credenciales se pueden usar como usuario de la FIA (de momento único).
-
-       Usuario: FIA
-
-       Clave: FIA123
