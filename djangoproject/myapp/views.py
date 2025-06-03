@@ -11,6 +11,7 @@ from .utils import *
 from django.contrib.auth.models import User
 from .permisos import *
 from .IA_utils import *
+from django.db.models import Count
 # Create your views here.
 
 def index(request):
@@ -338,9 +339,15 @@ def administrar_fuentes(request):
             return redirect('administrar_fuentes')   
 
 def resumir_texto(request):
+    sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
     if request.method==('GET'):
-        return render(request, 'resumir_texto.html',{'vista': 1})
+        return render(request, 'resumir_texto.html',{'vista': 1,"fuentes":sin_resumen})
     else:
         texto = str(request.POST['texto'])
+        fuente = str(request.POST['fuente'])
         resumen = Get_resumen(texto)
+        if fuente != "aaa":
+            obj_fuente = models.Fuente.objects.get(pk=fuente)
+            registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
+            registro.save()
         return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})

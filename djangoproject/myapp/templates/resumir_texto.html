@@ -9,10 +9,18 @@
 </head>
 {% if vista == 1 %}
 <h1>Envie el texto que desea resumir</h1>
-<div> Notar que una vez enviado debe esperar dentro de la misma pagina para esperar la respuesta (Por motivos de testing).</div>
+<div> Notar que una vez enviado debe esperar dentro de la misma pagina para esperar la respuesta (Por motivos de testing).</div> 
+<div> En caso de no indicar la fuente se genara el resumen pero no se almacenara en la base de datos.</div> 
 <form method='POST'>
     {% csrf_token %}
     <div class="form-group">
+        <label for="fuente" style="font-weight: bold; color: green;">Requerimiento:</label><br>
+        <select name="fuente" id="fuente" style="padding: 5px; border-radius: 5px; border: 2px solid black;">
+        <option value="aaa">---------</option>
+        {% for fuente in fuentes %}
+            <option value="{{ fuente.id }}">{{ fuente.enlace }}</option>
+        {% endfor %}
+        </select>
         <label for="id_descripcion">Texto:</label><br>
         <textarea class="form-group" name="texto" rows="4" cols="50"></textarea><br>        
     </div>

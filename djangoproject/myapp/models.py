@@ -1,5 +1,5 @@
 from django.db import models
-
+import json
 # Create your models here.
     
 class Requerimiento(models.Model):
@@ -28,3 +28,18 @@ class Fuente(models.Model):
     estado = models.IntegerField(default=1)
     def __str__(self):
         return str(self.enlace) if self.enlace else "Sin título"
+    
+class Resumen(models.Model):
+    fuente = models.ForeignKey(Fuente,on_delete=models.CASCADE)
+    etiquetas = models.TextField(default='[]')
+    resumen = models.CharField(max_length=2500)
+    estado = models.IntegerField(default=-1)
+
+    def get_lista(self):
+        try:
+            return json.loads(self.lista_serializada)
+        except json.JSONDecodeError:
+            return []
+
+    def set_lista(self, lista):
+        self.lista_serializada = json.dumps(lista)

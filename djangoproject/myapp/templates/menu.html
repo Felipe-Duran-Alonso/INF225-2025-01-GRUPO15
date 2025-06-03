@@ -5,65 +5,93 @@
 {% if user.is_authenticated %}
     <nav class="navbar">
         <ul class="navbar-list">
+    {% if not user.is_staff and not user.is_superuser %}
             <li>
                 <a href='/'>
                     Inicio
                 </a>
             </li>
             <li>
-                <a href='/ver_requerimientos'>
-                    Ver requerimientos
+                <a href="#">Requerimientos</a>
+                <ul>
+                    <li><a href='/ver_requerimientos'>Consultar</a></li>
+                    <li><a href='/requerimientos'>Ingresar</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Boletines</a>
+                <ul>
+                    <li><a href='/ver_boletines/'>Ver publicos</a></li>
+                </ul>
+            </li>
+    {% endif %}
+    {% if user.is_staff and not user.is_superuser %}
+            <li>
+                <a href='/'>
+                    Inicio
                 </a>
             </li>
             <li>
-                <a href='/requerimientos'>
-                    Enviar requerimiento
-                </a>
+                <a href="#">Requerimientos</a>
+                <ul>
+                    <li><a href='/ver_requerimientos'>Consultar</a></li>
+                    <li><a href='/requerimientos'>Ingresar</a></li>
+                    <li><a href='/editar_requerimientos'>Modificar</a></li>    
+                </ul>
             </li>
+            <li>
+                <a href="#">Boletines</a>
+                <ul>
+                    <li><a href='/ver_boletines/'>Ver publicos</a></li>
+                    <li><a href='/editar_boletines'>Administrar</a></li>  
+                    <li><a href='/subir_boletines/'>Subir</a></li>  
+                    <li><a href='/estadisticas_boletines/'>Estadisticas</a></li>                                                             
+                </ul>
             </li>
             <li>
-                <a href='/ver_boletines/'>
-                    Ver boletines publicos
-                </a>
+                <a href="#">Fuentes</a>
+                <ul>
+                    <li><a href='/administrar_fuentes/'>Administrar</a></li>                                                            
+                </ul>
             </li>
-    {% if user.is_staff %}
-            <li>
-                <a href='/editar_requerimientos'>
-                    Modificar requerimientos
-                </a>
-            </li>    
-            <li>
-                <a href='/editar_boletines'>
-                    Administrar boletines
-                </a>
-            </li>            
-            <li>
-                <a href='/subir_boletines/'>
-                    Subir boletines
-                </a>
-            </li>    
-            <li>
-                <a href='/estadisticas_boletines/'>
-                    Estadisticas por boletin
-                </a>
-            </li>  
-            <li>
-                <a href='/administrar_fuentes/'>
-                    Fuentes
-                </a>
-            </li>  
+
     {% endif %}
     {% if user.is_superuser %}
+            <li>
+                <a href='/'>
+                    Inicio
+                </a>
+            </li>
+            <li>
+                <a href="#">Requerimientos</a>
+                <ul>
+                    <li><a href='/ver_requerimientos'>Consultar</a></li>
+                    <li><a href='/requerimientos'>Ingresar</a></li>
+                    <li><a href='/editar_requerimientos'>Modificar</a></li>    
+                </ul>
+            </li>
+            <li>
+                <a href="#">Boletines</a>
+                <ul>
+                    <li><a href='/ver_boletines/'>Ver publicos</a></li>
+                    <li><a href='/editar_boletines'>Administrar</a></li>  
+                    <li><a href='/subir_boletines/'>Subir</a></li>  
+                    <li><a href='/estadisticas_boletines/'>Estadisticas</a></li>                                                               
+                </ul>
+            </li>
+            <li>
+                <a href="#">Fuentes</a>
+                <ul>
+                    <li><a href='/administrar_fuentes/'>Administrar</a></li>  
+                    <li><a href='/resumir_texto/'>Resumir</a></li>                                                                              
+                </ul>
+            </li>
             <li>
                 <a href='/modificar_configuraciones/'>
                     Configuraciones
                 </a>
             </li>
-            <li>
-                <a href='/resumir_texto/'>
-                    Resumir
-                </a>
-            </li>
+
             
     {% endif %}
             <li>
@@ -98,28 +126,30 @@
     
 {% endblock %}
 <style>
-    /* Barra de navegación */
+    /* ----------------------------------------------------
+       Estilos corregidos de la barra de navegación
+       ---------------------------------------------------- */
     .navbar {
         background-color: #333;
-        overflow: hidden;
+        /* Cambiamos overflow para que los submenús puedan “salir” de esta caja */
+        overflow: visible;  /* <-- antes: hidden */
     }
     
-    /* Estilo de la lista */
     .navbar-list {
         list-style-type: none;
         margin: 0;
         padding: 0;
         display: flex;
-        justify-content: center;  /* Centra los elementos */
+        justify-content: center;  /* Centra los elementos horizontalmente */
     }
 
-    /* Estilo de cada ítem */
+    /* Hacer que cada <li> sea inline-block + position relative */
     .navbar-list li {
-        display: inline;
-        margin-right: 20px;  /* Espacio entre los elementos */
+        display: inline-block;     /* <-- anteriormente era inline */
+        margin-right: 20px;        /* Espacio entre los elementos de nivel superior */
+        position: relative;        /* Para posicionar el submenú con absolute */
     }
     
-    /* Estilo de los enlaces */
     .navbar-list a {
         color: white;
         text-decoration: none;
@@ -129,9 +159,52 @@
         font-size: 16px;
     }
     
-    /* Efecto al pasar el ratón sobre los enlaces */
     .navbar-list a:hover {
         background-color: #ddd;
         color: black;
+    }
+
+    /* ----------------------------------------------------
+       Estilos para el submenú (hover dropdown)
+       ---------------------------------------------------- */
+
+    /* 1. Ocultamos cualquier <ul> dentro de un <li> */
+    .navbar-list li ul {
+        display: none;            
+        position: absolute;       /* “Flota” sobre el contenido */
+        top: 100%;                /* Justo debajo del <li> padre */
+        left: 0;                  /* Alineado al borde izquierdo del <li> padre */
+        background-color: #333;   /* Misma base de color que la barra */
+        min-width: 160px;         /* Ancho mínimo del submenú */
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        z-index: 1000;            /* Por encima de otros elementos */
+    }
+
+    /* 2. Cada item del submenú va en bloque (vertical) */
+    .navbar-list li ul li {
+        display: block;          /* Vertical, uno debajo de otro */
+        margin: 0;               /* Sin márgenes laterales */
+    }
+
+    /* 3. Enlaces del submenú: padding más pequeño, alineación a la izquierda */
+    .navbar-list li ul li a {
+        padding: 12px 16px;
+        color: white;
+        background-color: #333;
+        text-align: left;
+        font-size: 15px;
+    }
+
+    /* 4. Hover dentro del submenú */
+    .navbar-list li ul li a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    /* 5. Al hacer hover sobre el <li> padre, mostramos el <ul> anidado */
+    .navbar-list li:hover > ul {
+        display: block;
     }
 </style>
