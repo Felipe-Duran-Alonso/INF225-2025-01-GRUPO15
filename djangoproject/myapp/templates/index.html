@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+{% extends 'menu.html' %}
+        <head>
+		<link rel='icon' href='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNNhQDh-rRexyVxq7nWS-O1naI4gDd7CVNnw&s' type='image/x-icon'/>
+                <meta charset="utf-8"/>
+                <title>Pagina de Inicio</title>
+		<style>
+			body {
+  				/* Center the form on the page */
+  				text-align: center;
+			}
+
+			form {
+ 				 display: inline-block;
+  				/* Form outline */
+ 				 padding: 1em;
+				  border: 1px solid #ccc;
+ 				 border-radius: 1em;
+			}
+
+			ul {
+  				list-style: none;
+  				padding: 0;
+				  margin: 0;
+			}
+
+			form li + li {
+				margin-top: 1em;
+			}
+
+			label {
+			  	/* Uniform size & alignment */
+ 				 display: inline-block;
+ 				 min-width: 90px;
+		 		text-align: right;
+			}
+
+			input,input:focus,.button {
+  				/* Align buttons with the text fields */
+ 				 padding-left: 90px; /* same size as the label elements */
+			}
+
+			button {
+ 				 /* This extra margin represent roughly the same space as the space
+    				 between the labels and their text fields */
+ 				 margin-left: 0.5em;
+			}
+
+		</style>
+        </head>
+        <body>
+		<img src='https://www.fia.cl/wp-content/uploads/2018/02/D%C3%ADa-de-Campo-Consorcio.jpg' alt='FIA imagen'/>
+                <h1>Bienvenido, funcionario de FIA</h1>
+		<h2>Elija que quiere hacer:</he>
+		<ul>
+		<li>
+			<a href="registro.html">
+				<button type="submit"> Registrarse</button> 
+			</a>
+		</li>
+		<li>
+			<a href="iniciar_sesion.html">
+				<button type="submit"> Iniciar sesión</button>
+			</a>
+		</li>
+		<li>
+			<a href="iniciar_sesion.html">
+				<button type="submit"> Iniciar sesión</button>
+			</a>
+		</li>
+		</ul>
+        </body>
+{% endblock %}
+</html>

@@ -1,0 +1,137 @@
+{% load static %}
+{% block head %}
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+{% endblock %}
+{% if user.is_authenticated %}
+    <nav class="navbar">
+        <ul class="navbar-list">
+            <li>
+                <a href='/'>
+                    Inicio
+                </a>
+            </li>
+            <li>
+                <a href='/ver_requerimientos'>
+                    Ver requerimientos
+                </a>
+            </li>
+            <li>
+                <a href='/requerimientos'>
+                    Enviar requerimiento
+                </a>
+            </li>
+            </li>
+            <li>
+                <a href='/ver_boletines/'>
+                    Ver boletines publicos
+                </a>
+            </li>
+    {% if user.is_staff %}
+            <li>
+                <a href='/editar_requerimientos'>
+                    Modificar requerimientos
+                </a>
+            </li>    
+            <li>
+                <a href='/editar_boletines'>
+                    Administrar boletines
+                </a>
+            </li>            
+            <li>
+                <a href='/subir_boletines/'>
+                    Subir boletines
+                </a>
+            </li>    
+            <li>
+                <a href='/estadisticas_boletines/'>
+                    Estadisticas por boletin
+                </a>
+            </li>  
+            <li>
+                <a href='/administrar_fuentes/'>
+                    Fuentes
+                </a>
+            </li>  
+    {% endif %}
+    {% if user.is_superuser %}
+            <li>
+                <a href='/modificar_configuraciones/'>
+                    Configuraciones
+                </a>
+            </li>
+            <li>
+                <a href='/resumir_texto/'>
+                    Resumir
+                </a>
+            </li>
+            
+    {% endif %}
+            <li>
+                <a href='/cerrar_sesion'>
+                    Cerrar sesion
+                </a>
+            </li>    
+        </ul>
+    </nav>	
+{% else %}
+<nav class="navbar">
+    <ul class="navbar-list">
+        <li>
+            <a href='/'>
+                Inicio
+            </a>
+        </li>
+        <li>
+            <a href='/ver_boletines/'>
+                Ver boletines publicos
+            </a>
+        </li>
+        <li>
+            <a href='/accounts/login/?next=/'>
+                Iniciar sesion
+            </a>
+        </li>
+    </ul>
+</nav>	
+{% endif %}
+{% block content %}
+    
+{% endblock %}
+<style>
+    /* Barra de navegación */
+    .navbar {
+        background-color: #333;
+        overflow: hidden;
+    }
+    
+    /* Estilo de la lista */
+    .navbar-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;  /* Centra los elementos */
+    }
+
+    /* Estilo de cada ítem */
+    .navbar-list li {
+        display: inline;
+        margin-right: 20px;  /* Espacio entre los elementos */
+    }
+    
+    /* Estilo de los enlaces */
+    .navbar-list a {
+        color: white;
+        text-decoration: none;
+        padding: 14px 20px;
+        display: block;
+        text-align: center;
+        font-size: 16px;
+    }
+    
+    /* Efecto al pasar el ratón sobre los enlaces */
+    .navbar-list a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+</style>

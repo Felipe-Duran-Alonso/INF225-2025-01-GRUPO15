@@ -1,0 +1,108 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+
+<h1>Ingrese la nueva fuente de informacion</h1>
+<form method='POST'>
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ formulario.enlace.id_for_label }}">Enlace a la fuente</label>
+        {{ formulario.enlace }}
+    </div>
+    <button type="submit" class="btn-submit">Guardar</button>
+    <input type="hidden" name="ingresar" value="1">
+</form>
+
+{% if user.is_superuser %}
+
+<h1>Modificar estado de las fuentes</h1>
+
+
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Enlace</h2></th>
+            <th><h2>Estado</h2></th>
+            <th><h2>Opcion</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for fuente in fuentes %}
+
+                <tr>
+                    <td>{{fuente.enlace}}</td>
+            {% if fuente.estado == 1 %} 
+                    <td>Activo</td>               
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="0">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">❌ Deshabilitar</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="-1">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">❓ Por revisar</button>
+                        </form>                        
+            {% else %}
+                {% if fuente.estado == 0 %}
+                    <td>Deshabilitada</td>
+                    <td>               
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="1">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">✅ Habilitar</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="-1">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">❓ Por revisar</button>
+                        </form>      
+                {% else %}
+                    <td>En revision</td>
+                    <td>               
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="1">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">✅ Habilitar</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                            <input type="hidden" name="flag" value="0">
+                            <input type="hidden" name="ingresar" value="0">
+                            <button class="btn-invisible" type="submit">❌ Deshabilitar</button>
+                        </form>                     
+                {% endif %}
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="fuente_id" value="{{ fuente.id }}">
+                <input type="hidden" name="flag" value="100">
+                <input type="hidden" name="ingresar" value="0">
+                <button class="btn-invisible" type="submit">❌ ELIMINAR ❌</button>
+            </form>        
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'menu.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_usuario.css' %}">
+</head>
+<h1>Inicie sesión con sus credenciales FIA</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="username">Usuario</label>
+        <input type="text" name="username" id="username" required>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+
+    <button type="submit" class="btn-submit">Iniciar</button>
+</form>
+{% endblock %}

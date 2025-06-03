@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel='icon' href='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNNhQDh-rRexyVxq7nWS-O1naI4gDd7CVNnw&s' type='image/x-icon'/>
+    <meta charset="utf-8"/>
+    <title>Página de registro</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        form {
+            display: inline-block;
+            padding: 1em;
+            border: 1px solid #ccc;
+            border-radius: 1em;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        form li + li {
+            margin-top: 1em;
+        }
+
+        label {
+            display: inline-block;
+            min-width: 90px;
+            text-align: right;
+        }
+
+        input, input:focus, .button {
+            padding-left: 90px;
+        }
+
+        button {
+            margin-left: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <img src='https://www.fia.cl/wp-content/uploads/2022/04/Avonni-web-768x460.jpg' alt='FIA imagen'/>
+    <h1>Ingresar datos:</h1>
+    <form action="registro.php" method="post">
+        <ul>
+            <li>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="id_nombre" name="user_name" required/>
+            </li>
+            <li>
+                <label for="contra">Contraseña:</label>
+                <input type="password" id="id_contra" name="user_password" required/>
+            </li>
+            <li>
+                <label for="confi_contra">Confirmar contraseña:</label>
+                <input type="password" id="id_confi_contra" name="user_passaword_confirm" required/>
+            </li>
+        </ul>
+        <button type="submit">Registrar</button>
+    </form>
+    <a href="index.html"><button type="button">Volver</button></a>
+</body>
+</html>

@@ -1,0 +1,107 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_boletin_aux.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+
+<h1>Edite los campos que vea necesarios</h1>
+<form method="POST" class="formulario-boletin" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_titulo">Título:</label>
+        <p>Valor anterior: {{ Boletin.titulo }}</p>
+        <input type="text" name="titulo" id="id_titulo" maxlength="255" class="form-control">
+    </div>
+
+    <!-- Sección de descripción -->
+    <div class="form-group">
+        <label for="id_descripcion">Descripción:</label>
+        <p>Valor anterior: {{ Boletin.descripcion }}</p>
+        <textarea name="descripcion" id="id_descripcion" class="form-control"></textarea>
+    </div>
+
+    <!-- Sección del archivo PDF -->
+    <div class="form-group">
+        <label for="id_archivo_pdf">Archivo PDF:</label>
+        <p>Valor anterior: <a href="{{ Boletin.archivo_pdf.url }}" target="_blank">Ver PDF</a></p>
+        <input type="file" name="archivo_pdf" id="id_archivo_pdf" accept="application/pdf" class="form-control">
+    </div>
+
+    <!-- Sección del requerimiento -->
+    <div class="form-group">
+        <label for="id_requerimiento">Requerimiento:</label>
+        <p>Valor anterior: {{ Boletin.requerimiento }}</p>
+        <select name="requerimiento" id="id_requerimiento" class="form-control" required>
+            <!-- Opción vacía como valor predeterminado -->
+            <option value="" disabled selected>Seleccione un requerimiento</option>
+            
+            {% for requerimiento in requerimientos %}
+            <option value="{{ requerimiento.id }}" {% if requerimiento.id == Boletin.requerimiento.id %}selected{% endif %}>
+                {{ requerimiento.id }}
+            </option>
+            {% endfor %}
+        </select>
+    </div><br>
+
+    <!-- Botón para enviar -->
+    <div>
+        <button type="submit" class="btn-submit">Editar Boletín</button>
+    </div>
+    <input type="hidden" name="lugar" value="1">
+    <input type="hidden" name="eliminar" value="0">
+    <input type="hidden" name="mostrar" value="0">
+    <input type="hidden" name="boletin_id" value="{{boletin_id}}">
+</form>
+{% if mostrar %}
+    <table border = "1">
+        <thead>
+            <tr>
+                <th><h2>Id</h2></th>
+                <th><h2>Regiones</h2></th>
+                <th><h2>Objetivos</h2></th>
+                <th><h2>Descripcion</h2></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for req in requerimientos %}
+                    <tr>
+                        <td>{{req.id}}</td>
+                        <td>{{req.regiones}}</td>
+                        <td>{{req.objetivo}}</td>
+                        <td>{{req.descripcion}}</td>
+                    </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+    <form method="POST" class="formulario-boletin">
+        {% csrf_token %}
+        <input type="hidden" name="eliminar" value="0">
+        <input type="hidden" name="lugar" value="1">
+        <input type="hidden" name="mostrar" value="1">
+        <input type="hidden" name="boletin_id" value="{{boletin_id}}">
+        <select name="tipo" class="form-control" required>
+            <option value="" disabled selected>Seleccione un tipo de requerimiento</option>
+            {% for tipo in estados %}
+            <option value="{{ tipo }}">
+                {{ tipo }}
+            </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-submit">Ver IDs de requerimientos</button>
+    </form>
+<form method="POST" class="formulario-boletin">
+    {% csrf_token %}
+    <input type="hidden" name="eliminar" value="1">
+    <input type="hidden" name="lugar" value="1">
+    <input type="hidden" name="boletin_id" value="{{boletin_id}}">
+    <button type="submit" class="btn-submit">Eliminar Boletín</button>
+</form>
+
+{% endblock %}

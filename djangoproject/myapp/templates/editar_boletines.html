@@ -1,0 +1,74 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+<h1>
+    Boletines publicos
+</h1>
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Titulo</h2></th>
+            <th><h2>Fecha</h2></th>
+            <th><h2>Descripcion</h2></th>
+            <th><h2>Estado actual</h2></th>
+            <th><h2>Opcion</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for boletin in Boletin %}
+
+                <tr>
+                    <td>{{boletin.titulo}}</td>
+                    <td>{{boletin.fecha_creacion}}</td>
+                    <td>{{boletin.descripcion}}</td>
+            {% if boletin.es_publico == True %} 
+                    <td>Publico</td>               
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="boletin_id" value="{{ boletin.id }}">
+                            <input type="hidden" name="boletin_estado" value="{{ False }}">
+                            <input type="hidden" name="flag" value="0">
+                            <input type="hidden" name="lugar" value="0">
+                            <button class="btn-invisible" type="submit">❌ Ocultar</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="boletin_id" value="{{ boletin.id }}">
+                            <input type="hidden" name="flag" value="1">
+                            <input type="hidden" name="lugar" value="0">
+                            <button class="btn-invisible" type="submit">⚙️ Cambiar</button>
+                        </form>                        
+                    </td>
+                    </tr>
+            {% else %}
+                    <td>Oculto</td>
+                    <td>               
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="boletin_id" value="{{ boletin.id }}">
+                            <input type="hidden" name="boletin_estado" value="{{ True }}">
+                            <input type="hidden" name="flag" value="0">
+                            <input type="hidden" name="lugar" value="0">
+                            <button class="btn-invisible" type="submit">✅ Publicar</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="boletin_id" value="{{ boletin.id }}">
+                            <input type="hidden" name="flag" value="1">
+                            <input type="hidden" name="lugar" value="0">
+                            <button class="btn-invisible" type="submit">⚙️ Cambiar</button>
+                        </form>     
+                    </td>
+                    </tr>            
+            {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

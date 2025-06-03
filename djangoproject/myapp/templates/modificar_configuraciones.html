@@ -1,0 +1,114 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+<h1>⚙️ Modifique el campo que desea cambiar ⚙️</h1>
+<br>
+<h2>Cambiar estado de la API de MAKE</h2>
+<p>Formateo de requerimientos a la hora de ingresarlos o modificarlos</p>
+{% if ACTIVACION_API_MAKE %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="opcion_ACTIVACION_API_MAKE" value="0">
+        <input type="hidden" name="flag" value="0">
+        <button class="btn-invisible" type="submit">❌ Desactivar</button>
+    </form></p>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="opcion_ACTIVACION_API_MAKE" value="1">
+        <input type="hidden" name="flag" value="0">
+        <button class="btn-invisible" type="submit">✅ Activar</button>
+    </form></p>
+{% endif %}
+<br>
+
+<h2>Sincronizar estado de los requerimientos</h2>
+<p>Marca los boletines como listos, en caso de que se hayan subido manualmente</p>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="flag" value="-1">
+    <button class="btn-invisible" type="submit">🔄 Sincronizar</button>
+</form></p>
+
+<br>
+{% if user.is_superuser %}
+    <h2>Lista de usuarios</h2>
+    <p>Modifique el estado de activacion o nivel de acceso de los usuarios</p>
+    <table border = "1">
+        <thead>
+            <tr>
+                <th><h2>Username</h2></th>
+                <th><h2>Email</h2></th>
+                <th><h2>Activacion</h2></th>
+                <th><h2>Staff</h2></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for USER in USUARIOS %}
+    
+                    <tr>
+                        <td>{{USER.username}}</td>
+                        <td>{{USER.email}}</td>
+                {% if USER.is_active == True %}             
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ USER.id }}">
+                                <input type="hidden" name="Activacion" value="0">
+                                <input type="hidden" name="Staff" value="-1">
+                                <input type="hidden" name="flag" value="1">
+                                <button class="btn-invisible" type="submit">❌ Desactivar</button>
+                            </form>
+                        </td>
+                {% else %}
+                        <td>               
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ USER.id }}">
+                                <input type="hidden" name="Activacion" value="1">
+                                <input type="hidden" name="Staff" value="-1">
+                                <input type="hidden" name="flag" value="1">
+                                <button class="btn-invisible" type="submit">✅ Activar</button>
+                            </form>
+                        </td>           
+                {% endif %}
+
+                {% if USER.is_staff == True %}             
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ USER.id }}">
+                                <input type="hidden" name="Activacion" value="-1">
+                                <input type="hidden" name="Staff" value="0">
+                                <input type="hidden" name="flag" value="1">
+                                <button class="btn-invisible" type="submit">❌ Desactivar</button>
+                            </form>
+                        </td>
+                        </tr>
+                {% else %}
+                        <td>               
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_id" value="{{ USER.id }}">
+                                <input type="hidden" name="Activacion" value="-1">
+                                <input type="hidden" name="Staff" value="1">
+                                <input type="hidden" name="flag" value="1">
+                                <button class="btn-invisible" type="submit">✅ Activar</button>
+                            </form>
+                        </td>
+                        </tr>            
+                {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>    
+{% endif %}
+
+{% endblock %}
+
+

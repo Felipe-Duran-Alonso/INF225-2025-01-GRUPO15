@@ -1,0 +1,82 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+<h1>
+    Requerimientos modificables
+</h1>
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Regiones</h2></th>
+            <th><h2>Objetivos</h2></th>
+            <th><h2>Descripcion</h2></th>
+            <th><h2>Eliminar</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for req in Requerimiento %}
+        {% if req.estados == 0 %} 
+                <tr>
+                    <td><p>{{req.regiones}}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="requerimiento_id" value="{{ req.id }}">
+                            <input type="hidden" name="requerimiento_editar_reg" value="1">
+                            <input type="hidden" name="requerimiento_editar_obj" value="0">
+                            <input type="hidden" name="requerimiento_editar_des" value="0">
+                            <input type="hidden" name="eliminar" value="0">
+                            <input type="hidden" name="flag" value="0">
+                            <button class="btn-invisible" type="submit">⚙️ Cambiar</button>
+                        </form></p>
+                    </td>
+
+                    <td><p>{{req.objetivo}}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="requerimiento_id" value="{{ req.id }}">
+                            <input type="hidden" name="requerimiento_editar_reg" value="0">
+                            <input type="hidden" name="requerimiento_editar_obj" value="1">
+                            <input type="hidden" name="requerimiento_editar_des" value="0">
+                            <input type="hidden" name="eliminar" value="0">
+                            <input type="hidden" name="flag" value="0">
+                            <button class="btn-invisible" type="submit">⚙️ Cambiar</button>
+                        </form></p>                        
+                    </td>
+
+                    <td><p>{{req.descripcion}}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="requerimiento_id" value="{{ req.id }}">
+                            <input type="hidden" name="requerimiento_editar_reg" value="0">
+                            <input type="hidden" name="requerimiento_editar_obj" value="0">
+                            <input type="hidden" name="requerimiento_editar_des" value="1">
+                            <input type="hidden" name="eliminar" value="0">
+                            <input type="hidden" name="flag" value="0">
+                            <button class="btn-invisible" type="submit">⚙️ Cambiar</button>
+                        </form></p>
+                    </td>
+
+                    <td> 
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="requerimiento_id" value="{{ req.id }}">
+                            <input type="hidden" name="requerimiento_editar_reg" value="0">
+                            <input type="hidden" name="requerimiento_editar_obj" value="0">
+                            <input type="hidden" name="requerimiento_editar_des" value="0">
+                            <input type="hidden" name="eliminar" value="1">
+                            <input type="hidden" name="flag" value="0">
+                            <button class="btn-invisible" type="submit">❌ Eliminar</button>
+                        </form>
+                    </tr>     
+        {% endif %}                    
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

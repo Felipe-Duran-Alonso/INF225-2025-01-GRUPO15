@@ -1,0 +1,30 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_requerimiento.css' %}">
+</head>
+
+<h1>Envie sus requerimientos para su boletin</h1>
+<form method='POST'>
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ formulario.objetivo.id_for_label }}">Objetivo principal</label>
+        {{ formulario.objetivo }}
+    </div>
+    <div class="form-group">
+        <label for="{{ formulario.regiones.id_for_label }}">Regiones involucradas</label>
+        {{ formulario.regiones }}
+    </div>
+    <div class="form-group">
+        <label for="{{ formulario.descripcion.id_for_label }}">Descripción general</label>
+        {{ formulario.descripcion }}
+    </div>
+    <button type="submit" class="btn-submit">Guardar</button>
+</form>
+
+
+{% endblock %}

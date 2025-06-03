@@ -1,0 +1,93 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+<h1>
+    Requerimientos ingresados (sin procesar aún)
+</h1>
+{% if cant_registrados == 0 %}
+    <p>❌ No hay requerimientos de este tipo ❌</p>
+{% else %}
+    <table border = "1">
+        <thead>
+            <tr>
+                <th><h2>Regiones</h2></th>
+                <th><h2>Objetivos</h2></th>
+                <th><h2>Descripcion</h2></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for req in Requerimiento %}
+                {% if req.estados == 0 %}
+                    <tr>
+                        <td>{{req.regiones}}</td>
+                        <td>{{req.objetivo}}</td>
+                        <td>{{req.descripcion}}</td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<h1>
+    Requerimientos en proceso (se esta confeccionando un boletin con estos)
+</h1>
+{% if cant_pendientes == 0 %}
+    <p>❌ No hay requerimientos de este tipo ❌</p>
+{% else %}
+    <table border = "1">
+        <thead>
+            <tr>
+                <th><h2>Regiones</h2></th>
+                <th><h2>Objetivos</h2></th>
+                <th><h2>Descripcion</h2></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for req in Requerimiento %}
+                {% if req.estados == -1 %}
+                    <tr>
+                        <td>{{req.regiones}}</td>
+                        <td>{{req.objetivo}}</td>
+                        <td>{{req.descripcion}}</td>
+                    </tr>
+                {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<h1>
+    Requerimientos que ya tienen boletin
+</h1>
+{% if cant_listo == 0 %}
+    <p>❌ No hay requerimientos de este tipo ❌</p>
+{% else %}
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Regiones</h2></th>
+            <th><h2>Objetivos</h2></th>
+            <th><h2>Descripcion</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for req in Requerimiento %}
+            {% if req.estados == 1 %}
+                <tr>
+                    <td>{{req.regiones}}</td>
+                    <td>{{req.objetivo}}</td>
+                    <td>{{req.descripcion}}</td>
+                </tr>
+            {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+import os, sys
+from gpt4all import GPT4All
+
+#MODEL_DIR  = r"C:\Users\felid\.cache\huggingface\hub\models--QuantFactory--Meta-Llama-3-8B-Instruct-GGUF\snapshots\86e0c07efa3f1b6f06ea13e31b1e930dce865ae4"
+#MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
+home_dir = os.path.expanduser("~")
+
+# Construye el path completo al modelo de forma portable
+MODEL_DIR = os.path.join(
+    home_dir,
+    ".cache", "huggingface", "hub",
+    "models--QuantFactory--Meta-Llama-3-8B-Instruct-GGUF",
+    "snapshots", "86e0c07efa3f1b6f06ea13e31b1e930dce865ae4"
+)
+
+MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
+
+
+def Get_resumen(texto):
+    global MODEL_DIR, MODEL_NAME
+    os.environ["GPT4ALL_NO_CUDA"] = "1"
+    orig_stderr = os.dup(2)
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(devnull, 2)
+    os.close(devnull)
+
+    modelo = GPT4All(
+        model_name=MODEL_NAME,
+        model_path=MODEL_DIR,
+        device="cpu",
+        allow_download=False
+    )
+
+    os.dup2(orig_stderr, 2)
+    os.close(orig_stderr)
+
+    #consulta = "Resume lo siguiente, obteniendo los puntos PRINCIPALES:\n" + str(texto)
+    #consulta+=".\nRetorna únicamente la respuesta, sin texto adicional y en Spanish y UTF-8.\n####"
+    consulta = (
+        "A continuación se presenta un texto. Haz un resumen conciso extrayendo SOLO las ideas principales, "
+        "sin interpretaciones personales ni explicaciones subjetivas. "
+        "Escribe el resumen en español claro y sin adornos. No incluyas ningún comentario adicional. "
+        "No empieces con frases como 'el texto trata sobre' o 'en resumen'. Solo devuelve el resumen en español y codificado en UTF-8. "
+        "Texto:\n" + str(texto) + "\n####"
+    )
+    flag = True
+    while(flag):
+        try:
+            with modelo.chat_session():
+                salida = modelo.generate(
+                    consulta,
+                    max_tokens=500, 
+                    temp=0.75
+                )
+            flag=False
+        except:
+            continue
+
+    respuesta = salida.split("####")[0].strip()
+    return respuesta.encode("cp1252", errors="ignore").decode("cp1252")

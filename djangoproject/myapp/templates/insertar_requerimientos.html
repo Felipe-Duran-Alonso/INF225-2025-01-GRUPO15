@@ -1,0 +1,19 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+
+{% if Regiones_nuevo == -1 and Objetivo_nuevo == -1 and Descripcion_nuevo == -1 %}
+    <h2>❌ Hubo un error en el manejo de la informacion ❌</h2>
+    <p>Codigo: {{Error}}</p>
+{% else %}
+    {% if Error != 0 %}
+        <h2>❌ Hubo un error en los datos ingresados ❌</h2>
+        <p>La componente erronea es {{Error}}</p>
+    {% else %}
+        <h2>✅ Insercion realizada con exito!! se insertaron los siguientes valores ✅</h2><br>
+        <p><h3 style="display: inline;">◦Regiones:</h3> {{Regiones_nuevo}}</p>
+        <p><h3 style="display: inline;">◦Objetivo:</h3> {{Objetivo_nuevo}}</p>
+        <p><h3 style="display: inline;">◦Descripcion:</h3> {{Descripcion_nuevo}}</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

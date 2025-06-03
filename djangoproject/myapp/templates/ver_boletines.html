@@ -1,0 +1,87 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+<h1>
+    Boletines publicos
+</h1>
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Titulo</h2></th>
+            <th><h2>Fecha</h2></th>
+            <th><h2>Descripcion</h2></th>
+            <th><h2>Archivo</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for boletin in Boletin %}
+            {% if boletin.es_publico == True %}
+                <tr>
+                    <td>{{boletin.titulo}}</td>
+                    <td>{{boletin.fecha_creacion}}</td>
+                    <td>{{boletin.descripcion}}</td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="ver" value="1">
+                            <input type="hidden" name="descargar" value="0">
+                            <input type="hidden" name="boletin_id" value="{{boletin.id}}">
+                            <button class="btn-invisible" type="submit">Ver PDF</button>
+                        </form>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="ver" value="0">
+                            <input type="hidden" name="boletin_id" value="{{boletin.id}}">
+                            
+                            <div class="form-group">
+                                <label for="formato_descarga">Descargar como:</label>
+                                <select name="descargar_formato" id="formato_descarga" class="form-control" required>
+                                    <option value="" disabled selected>Seleccione un formato</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="html">HTML</option>
+                                    <option value="docx">DOCX</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" type="submit" name="accion" value="descargar">Descargar</button>
+                        </form>
+                        
+                        <br>
+                        
+                        <!-- FORMULARIO PARA ENVIAR POR CORREO -->
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="ver" value="0">
+                            <input type="hidden" name="boletin_id" value="{{boletin.id}}">
+                        
+                            <div class="form-group">
+                                <label for="formato_email">Mandar por email como:</label>
+                                <select name="email_formato" id="formato_email" class="form-control" required>
+                                    <option value="" disabled selected>Seleccione un formato</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="html">HTML</option>
+                                    <option value="docx">DOCX</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Campo para ingresar el correo -->
+                            <div class="form-group mt-2">
+                                <label for="email_destinatario">Correo del destinatario:</label>
+                                <input type="email" name="email_destinatario" id="email_destinatario" class="form-control" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        
+                            <button class="btn btn-primary mt-3" type="submit" name="accion" value="enviar">Enviar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

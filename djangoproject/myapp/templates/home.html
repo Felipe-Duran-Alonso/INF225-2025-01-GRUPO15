@@ -1,0 +1,39 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Bienvenido, {{ user.username }}</h1>
+{% else %}
+<h1>Bienvenido</h1>
+{% endif %}
+{% load static %}
+    <div class="image-container">
+        <img src="{% static 'images/fondo_inicial3.webp' %}" alt="FIA imagen" class="responsive-img"/>
+    </div>
+
+    <h2><a href="https://www.fia.cl/" target="_blank">Más sobre nosotros</a></h2>
+<style>
+
+.image-container {
+    width: 100%;
+    text-align: center;  
+    margin: 20px 0; 
+}
+
+
+.responsive-img {
+    width: 100%;  
+    height: auto;  
+    border-radius: 8px; 
+    object-fit: cover;  
+}
+
+
+@media (max-width: 768px) {
+    .responsive-img {
+        width: 100%;  
+        height: auto;
+    }
+}
+</style>
+{% endblock %}

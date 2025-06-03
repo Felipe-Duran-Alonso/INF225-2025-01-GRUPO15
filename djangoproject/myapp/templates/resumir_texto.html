@@ -1,0 +1,25 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_requerimiento.css' %}">
+</head>
+{% if vista == 1 %}
+<h1>Envie el texto que desea resumir</h1>
+<div> Notar que una vez enviado debe esperar dentro de la misma pagina para esperar la respuesta (Por motivos de testing).</div>
+<form method='POST'>
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_descripcion">Texto:</label><br>
+        <textarea class="form-group" name="texto" rows="4" cols="50"></textarea><br>        
+    </div>
+    <button type="submit" class="btn-submit">Resumir</button>
+</form>
+{% else %}
+<h1>Resumen generado mediante IA.</h1>
+<div>{{ resumen }}</div>
+{% endif %}
+{% endblock %}

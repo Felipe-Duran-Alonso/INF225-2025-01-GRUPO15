@@ -1,0 +1,75 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_requerimiento_aux.css' %}">
+</head>
+{% if lugar == 1 %}   <!-- Caso post enviar info -->
+
+    {% if Regiones_nuevo == -1 and Objetivo_nuevo == -1 and Descripcion_nuevo == -1 %}
+        <h2>❌ Hubo un error en el manejo de la informacion ❌</h2>
+        <p>Codigo: {{Error}}</p>
+    {% else %}
+        {% if Error != 0 %}
+            <h2>❌ Hubo un error en los datos ingresados ❌</h2>
+            <p>La componente erronea es {{Error}}</p>
+        {% else %}
+            <h2>✅ Valores modificados con exito ✅</h2><br>
+            <p><h3 style="display: inline;">◦Regiones:</h3> {{Regiones_nuevo}}</p>
+            <p><h3 style="display: inline;">◦Objetivo:</h3> {{Objetivo_nuevo}}</p>
+            <p><h3 style="display: inline;">◦Descripcion:</h3> {{Descripcion_nuevo}}</p>
+        {% endif %}
+    {% endif %}
+
+{% else %}            <!-- Caso enviar info -->
+    <h1>⚙️ Suba la nueva informacion ⚙️</h1>
+
+    {% if editar_reg == 1 %}
+    <h3>Edite las regiones</h3>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="Regiones" class="form-group label">Regiones:</label>
+        <input type="text" id="Regiones" name="Regiones" maxlength="255" class="form-control">
+        <input type="hidden" name="Objetivo" value="0">
+        <input type="hidden" name="Descripcion" value="0">
+        <input type="hidden" name="Requerimiento" value="{{ Requerimiento }}">
+        <input type="hidden" name="requerimiento_id" value="{{ req_id }}">
+        <input type="hidden" name="flag" value="1">
+        <button type="submit" class="btn-submit">Enviar</button>
+    </form>
+    {% endif %}
+
+    {% if editar_obj == 1 %}
+    <h3>Edite el objetivo</h3>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="Objetivo" class="form-group label">Objetivo:</label>
+        <input type="text" id="Objetivo" name="Objetivo" maxlength="255" class="form-control">
+        <input type="hidden" name="Regiones" value="0">
+        <input type="hidden" name="Descripcion" value="0">
+        <input type="hidden" name="Requerimiento" value="{{ Requerimiento }}">
+        <input type="hidden" name="requerimiento_id" value="{{ req_id }}">
+        <input type="hidden" name="flag" value="1">
+        <button type="submit" class="btn-submit">Enviar</button>
+    </form>
+    {% endif %}
+
+    {% if editar_des == 1 %}
+    <h3>Edite la descripcion</h3>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="Descripcion" class="form-group label">Descripcion:</label>
+        <textarea id="Descripcion" name="Descripcion" rows="4" cols="50" class="form-control"></textarea>
+        <input type="hidden" name="Objetivo" value="0">
+        <input type="hidden" name="Regiones" value="0">
+        <input type="hidden" name="Requerimiento" value="{{ Requerimiento }}">
+        <input type="hidden" name="requerimiento_id" value="{{ req_id }}">
+        <input type="hidden" name="flag" value="1">
+        <button type="submit" class="btn-submit">Enviar</button>
+    </form>
+    {% endif %}
+{% endif %}
+{% endblock %}

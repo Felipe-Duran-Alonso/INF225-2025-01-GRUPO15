@@ -1,0 +1,116 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_boletin_aux.css' %}">
+</head>
+<h1>
+    Boletines publicos
+</h1>
+{% if cant_publicos == 0 %}
+    <p>❌ No hay boletines en este estado ❌</p>
+{% else %}
+    <p>● La media de vistas es {{vistas_publicos}}</p>
+    <p>● La media de descargas es {{descargas_publicos}}</p>
+    <table border = "1">
+        <thead>
+            <tr>
+                <th><h2>Titulo</h2></th>
+                <th><h2>Fecha</h2></th>
+                <th><h2>Descripcion</h2></th>
+                <th><h2>Archivo</h2></th>
+                <th><h2>Vistas</h2></th>
+                <th><h2>Descargas</h2></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for boletin in Boletines %}
+                {% if boletin.es_publico == True %}
+                    <tr>
+                        <td>{{boletin.titulo}}</td>
+                        <td>{{boletin.fecha_creacion}}</td>
+                        <td>{{boletin.descripcion}}</td>
+                        <td>
+                            <a href="{{ boletin.archivo_pdf.url }}" target="_blank">Ver PDF</a>
+                            <p>  </p>
+                            <a href="{{ boletin.archivo_pdf.url }}" download>Descargar PDF</a>
+                        </td>
+                    {% if boletin.vistas >= vistas_publicos %}
+                        <td>⬆️ {{boletin.vistas}}</td>
+                    {% else %}
+                        <td>⬇️ {{boletin.vistas}}</td>
+                    {% endif %}
+                    {% if boletin.descargas >= descargas_publicos %}
+                        <td>⬆️ {{boletin.descargas}}</td>
+                    {% else %}
+                        <td>⬇️ {{boletin.descargas}}</td>
+                    {% endif %}                        
+                    </tr>
+                {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+<br>
+
+{% if mostrar == 0 %}
+    <form method="POST" class="formulario-boletin">
+        {% csrf_token %}
+        <input type="hidden" name="mostrar" value="1">
+        <button type="submit" class="btn-submit">Ver boletines ocultos</button>
+    </form>
+{% else %}
+    <h1>
+        Boletines ocultos
+    </h1>
+    {% if cant_ocultos == 0 %}
+        <p>❌ No hay boletines en este estado ❌</p>
+    {% else %}
+        <p>● La media de vistas es {{vistas_ocultos}}</p>
+        <p>● La media de descargas es {{descargas_ocultos}}</p>
+        <table border = "1">
+            <thead>
+                <tr>
+                    <th><h2>Titulo</h2></th>
+                    <th><h2>Fecha</h2></th>
+                    <th><h2>Descripcion</h2></th>
+                    <th><h2>Archivo</h2></th>
+                    <th><h2>Vistas</h2></th>
+                    <th><h2>Descargas</h2></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for boletin in Boletines %}
+                    {% if boletin.es_publico == False %}
+                        <tr>
+                            <td>{{boletin.titulo}}</td>
+                            <td>{{boletin.fecha_creacion}}</td>
+                            <td>{{boletin.descripcion}}</td>
+                            <td>
+                                <a href="{{ boletin.archivo_pdf.url }}" target="_blank">Ver PDF</a>
+                                <p>  </p>
+                                <a href="{{ boletin.archivo_pdf.url }}" download>Descargar PDF</a>
+                            </td>
+                            {% if boletin.vistas >= vistas_ocultos %}
+                                <td>⬆️ {{boletin.vistas}}</td>
+                            {% else %}
+                                <td>⬇️ {{boletin.vistas}}</td>
+                            {% endif %}
+                            {% if boletin.descargas >= descargas_ocultos %}
+                                <td>⬆️ {{boletin.descargas}}</td>
+                            {% else %}
+                                <td>⬇️ {{boletin.descargas}}</td>
+                            {% endif %}   
+                        </tr>
+                    {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endif %}
+{% endblock %}
