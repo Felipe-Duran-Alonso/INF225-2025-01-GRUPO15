@@ -11,12 +11,10 @@
 
 1. Abrir la terminal en la ubicación del [archivo]() del proyecto.
 2. En caso de usar virtualenv (para windows):
-   
-     python -m venv venv      
+     <br>python -m venv venv      
      venv\Scripts\activate   
 4. Ejecutar la siguiente linea (En caso de no funciona, se recomienda reiniciar el equipo luego de la instalacion):
-   
-     pip install -r requirements.txt
-     huggingface-cli download QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
+     <br>pip install -r requirements.txt
+     <br>huggingface-cli download QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
 6. Escribir "python manage.py runserver" (en caso de que no funcioné escribir "python3 manage.py runserver").
 7. En la terminal se indicara la url de la página web normalmente "http://127.0.0.1:8000/".
