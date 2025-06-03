@@ -1,0 +1,6 @@
+django==5.1.2
+requests==2.32.3
+PyMuPDF==1.25.5
+pdf2docx==0.5.8
+gpt4all==2.8.2
+huggingface-hub==0.31.2
