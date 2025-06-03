@@ -17,7 +17,8 @@ urlpatterns = [
     path('modificar_configuraciones/', views.modificar_configuraciones, name="modificar_configuraciones"),
     path('estadisticas_boletines/', views.estadisticas_boletines, name="estadisticas_boletines"),
     path('administrar_fuentes/', views.administrar_fuentes, name="administrar_fuentes"),
-    path('resumir_texto/', views.resumir_texto, name="resumir_texto")
+    path('resumir_texto/', views.resumir_texto, name="resumir_texto"),
+    path('revisar_resumen/', views.revisar_resumen, name="revisar_resumen")
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

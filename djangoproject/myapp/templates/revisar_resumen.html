@@ -1,0 +1,56 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<h1>
+    Resumenes
+</h1>
+<d>Presione Enter cada vez que introduzca una etiqueta personalizada.</d>
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Fuente asociada</h2></th>
+            <th><h2>Resumen</h2></th>
+            <th><h2>Etiquetas</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for resumen in resumenes %}
+                <tr>
+                    <td>{{resumen.fuente}}</td>
+                    <td>{{resumen.resumen}}</td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <label for="etiquetas" style="font-weight: bold; color: green;">Etiquetas:</label><br>
+                            <select name="etiquetas[]" id="etiquetas" multiple="multiple" class="etiquetas-select" style="width: 100%;">
+                                {% for etiqueta in etiquetas %}
+                                    <option value="{{ etiqueta }}">{{ etiqueta }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="resumen_id" value="{{ resumen.id }}">
+                           <button class="btn-invisible" type="submit">✅ Aprobar resumen</button>
+                        </form>
+                    </td>        
+                </tr>       
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+    $(document).ready(function() {
+        $('.etiquetas-select').select2({
+            tags: true,
+            tokenSeparators: [',', ' '],
+            placeholder: "Escribe etiquetas y presiona Enter"
+        });
+    });
+</script>
+{% endblock %}

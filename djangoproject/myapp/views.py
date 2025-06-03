@@ -1,4 +1,5 @@
 import fitz
+import json
 from pdf2docx import Converter
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
@@ -351,3 +352,26 @@ def resumir_texto(request):
             registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
             registro.save()
         return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})
+    
+def revisar_resumen(request):
+    if request.method==('GET'):
+        etiquetas_totales = set()
+
+        for resumen in models.Resumen.objects.all():
+            try:
+                etiquetas = json.loads(resumen.etiquetas)
+                etiquetas_totales.update(etiquetas)
+            except json.JSONDecodeError:
+                continue      
+
+        resumenes = models.Resumen.objects.filter(estado=-1)
+
+        return render(request, 'revisar_resumen.html',{'vista': 0,"resumenes":resumenes,"etiquetas":etiquetas_totales})
+    else:
+        id = str(request.POST['resumen_id'])
+        obj_resumen = models.Resumen.objects.get(pk=id)
+        obj_resumen.estado = 1
+        etiquetas = request.POST.getlist('etiquetas[]')
+        obj_resumen.etiquetas = json.dumps(etiquetas)
+        obj_resumen.save()
+        return redirect('revisar_resumen') 
