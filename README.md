@@ -7,9 +7,14 @@
 ### Enlaces relevantes:
 *  [Repositorio Analisis y diseño de software.](https://github.com/Blindas31/GRUPO5-2024-PROYINF) 
 
-### Pasos a seguir para la ejecucion de la [ultima version](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/wiki/Avances-de-codigo#tercera-entrega) :
+### Pasos a seguir para la ejecucion de la [ultima version]() :
 
-1. Abrir la terminal en la ubicación del [archivo](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/blob/3aab533d490bafdf5733ba8db80c8d2b8aac88a1/mainHito3.zip) del proyecto.
-2. En caso de usar virtualenv escribir "source venv/Scripts/activate", para MacOS y Linux. "venv\Scripts\activate" para Windows.
-3. Escribir "python manage.py runserver" (en caso de que no funcioné escribir "python3 manage.py runserver").
-4. En la terminal se indicara la url de la página web normalmente "http://127.0.0.1:8000/".
+1. Abrir la terminal en la ubicación del [archivo]() del proyecto.
+2. En caso de usar virtualenv (para windows):
+     python -m venv venv      
+     venv\Scripts\activate   
+3. Ejecutar la siguiente linea (En caso de no funciona, se recomienda reiniciar el equipo luego de la instalacion):
+     pip install -r requirements.txt
+     huggingface-cli download QuantFactory/Meta-Llama-3-8B-Instruct-GGUF
+4. Escribir "python manage.py runserver" (en caso de que no funcioné escribir "python3 manage.py runserver").
+5. En la terminal se indicara la url de la página web normalmente "http://127.0.0.1:8000/".
