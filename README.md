@@ -7,9 +7,9 @@
 ### Enlaces relevantes:
 *  [Repositorio Analisis y diseño de software.](https://github.com/Blindas31/GRUPO5-2024-PROYINF) 
 
-### Pasos a seguir para la ejecucion de la [ultima version]() :
+### Pasos a seguir para la ejecucion de la [ultima version](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/wiki/Avances-de-codigo#cuarta-entrega) :
 
-1. Abrir la terminal en la ubicación del [archivo]() del proyecto.
+1. Abrir la terminal en la ubicación del [archivo](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/tree/dd1d979515e51b55a1c2a466e6511709b1eefcb6/djangoproject) del proyecto.
 2. En caso de usar virtualenv (para windows):
      <br>python -m venv venv      
      venv\Scripts\activate   
