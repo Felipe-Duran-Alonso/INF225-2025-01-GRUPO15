@@ -44,6 +44,13 @@
 
     {% if editar_obj == 1 %}
     <h3>Edite el objetivo</h3>
+
+    <!--Añadido-->
+    {% if Error %}
+        <div class="alerta de error"> {{ Error }}</div>
+    {% endif %}
+    <!---->
+
     <form method="post" class="form-group">
         {% csrf_token %}
         <label for="Objetivo" class="form-group label">Objetivo:</label>
