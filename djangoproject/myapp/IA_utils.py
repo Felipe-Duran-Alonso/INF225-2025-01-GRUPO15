@@ -1,6 +1,10 @@
 import os, sys
 from gpt4all import GPT4All
 
+#Nuevo
+from transformers import AutoTokenizer
+from huggingface_hub import snapshot_download
+
 #MODEL_DIR  = r"C:\Users\felid\.cache\huggingface\hub\models--QuantFactory--Meta-Llama-3-8B-Instruct-GGUF\snapshots\86e0c07efa3f1b6f06ea13e31b1e930dce865ae4"
 #MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
 home_dir = os.path.expanduser("~")
@@ -15,6 +19,29 @@ MODEL_DIR = os.path.join(
 
 MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
 
+#Nuevo path tokenizador
+TOKENIZER_DIR = os.path.join(home_dir, 
+    ".cache", "huggingface", "hub",
+    "llama2_tokenizer")
+TOKENIZER_FILES = ["tokenizer.json",
+                "tokenizer.model",
+                "tokenizer_config.json",
+                "special_tokens_map.json"]
+if not os.path.exists(os.path.join(TOKENIZER_DIR, "tokenizer.model")):
+    snapshot_download(
+        repo_id="NousResearch/Llama-2-7b-chat-hf",
+        allow_patterns=TOKENIZER_FILES,
+        local_dir=TOKENIZER_DIR,
+        local_dir_use_symlinks=False
+    )
+#Llamar al tokenizador
+tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DIR)
+
+#Nuevo
+def Contar_tokens(texto):
+    input_ids = tokenizer.encode(texto, add_special_tokens=True)
+    print(f"CANTIDAD DE TOKENS: {len(input_ids)}")
+    return len(input_ids)
 
 def Get_resumen(texto):
     global MODEL_DIR, MODEL_NAME
@@ -43,6 +70,13 @@ def Get_resumen(texto):
         "No empieces con frases como 'el texto trata sobre' o 'en resumen'. Solo devuelve el resumen en español y codificado en UTF-8. "
         "Texto:\n" + str(texto) + "\n####"
     )
+    
+    #Condicion texto largo->Limitar a 2200.
+    largo = Contar_tokens(consulta)
+    if largo>=2200:
+        print("TEXTO MUY LARGO")
+        return -1
+    
     flag = True
     while(flag):
         try:

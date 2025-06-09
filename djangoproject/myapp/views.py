@@ -347,6 +347,11 @@ def resumir_texto(request):
         texto = str(request.POST['texto'])
         fuente = str(request.POST['fuente'])
         resumen = Get_resumen(texto)
+        
+        #Caso que supera el límite -> Texto muy largo.
+        if resumen == -1:
+            return render(request, 'resumir_texto.html',{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
+        
         if fuente != "aaa":
             obj_fuente = models.Fuente.objects.get(pk=fuente)
             registro = models.Resumen(fuente = obj_fuente,resumen = resumen)

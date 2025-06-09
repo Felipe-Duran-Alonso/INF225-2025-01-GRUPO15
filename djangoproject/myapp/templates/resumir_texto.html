@@ -11,6 +11,14 @@
 <h1>Envie el texto que desea resumir</h1>
 <div> Notar que una vez enviado debe esperar dentro de la misma pagina para esperar la respuesta (Por motivos de testing).</div> 
 <div> En caso de no indicar la fuente se genara el resumen pero no se almacenara en la base de datos.</div> 
+
+<!--Nuevo-->
+{%if error_largo %}
+    <div style="color: red; font-weight: bold;">
+        El texto enviado es demasiado largo. Por favor, envíe un texto más corto.
+    </div>
+{% endif %}
+
 <form method='POST'>
     {% csrf_token %}
     <div class="form-group">

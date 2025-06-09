@@ -9,7 +9,7 @@
 
 ### Pasos a seguir para la ejecucion de la [ultima version](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/wiki/Avances-de-codigo#cuarta-entrega) :
 
-1. Abrir la terminal en la ubicación del [archivo](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/tree/dd1d979515e51b55a1c2a466e6511709b1eefcb6/djangoproject) del proyecto.
+1. Abrir la terminal en la ubicación del [archivo](https://github.com/Felipe-Duran-Alonso/INF225-2025-01-GRUPO15/tree/85707f890f6a4ca2b1194fe26b1fdf697de83994/djangoproject) del proyecto.
 2. En caso de usar virtualenv (para windows):
      <br>python -m venv venv      
      venv\Scripts\activate   

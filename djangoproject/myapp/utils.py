@@ -78,6 +78,21 @@ def evaluar_modificacion(request, Requerimiento_dict):
             Requerimiento.regiones = Requerimiento_dict["Regiones"]
         else:
             if Requerimiento_dict["Objetivo"] != "0" :
+                
+                #Caso Objetivo vacio -----
+                Obj = Requerimiento_dict["Objetivo"].strip()
+                if Obj == "":
+                    dict = {}
+                    dict["Regiones_nuevo"] = Requerimiento.regiones
+                    dict["Objetivo_nuevo"] = Requerimiento.objetivo
+                    dict["Descripcion_nuevo"] = Requerimiento.descripcion
+                    dict["Error"] = "El campo Objetivo no puede quedar vacío"    
+                    dict["lugar"] = 0
+                    dict["editar_obj"] = 1
+                    dict["req_id"] = Requerimiento_dict["Id"]
+                    return render(request, 'editar_requerimientos_aux.html', dict)
+                # --------
+                
                 Requerimiento.objetivo = Requerimiento_dict["Objetivo"]
             else:
                 Requerimiento.descripcion = Requerimiento_dict["Descripcion"]
