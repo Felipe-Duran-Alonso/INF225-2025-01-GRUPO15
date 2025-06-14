@@ -1,5 +1,6 @@
 import os, sys
 from gpt4all import GPT4All
+from textwrap import wrap
 
 #Nuevo
 from transformers import AutoTokenizer
@@ -43,7 +44,24 @@ def Contar_tokens(texto):
     print(f"CANTIDAD DE TOKENS: {len(input_ids)}")
     return len(input_ids)
 
+def split_text(text, max_tokens=1700):
+    # Aproximación: 1 token ≈ 4 caracteres en promedio (esto varía)
+    max_chars = max_tokens * 4
+    return wrap(text, max_chars)
+
 def Get_resumen(texto):
+    chunks = split_text(texto)
+    resumen = ""
+    for i, chunk in enumerate(chunks):
+        response = Get_resumen_aux(chunk)
+        print("RESPONSE", response)
+        resumen+=response + "\n"
+    if len(chunks)>1:
+        return Get_resumen_aux(resumen)
+    else:
+        return resumen
+
+def Get_resumen_aux(texto):
     global MODEL_DIR, MODEL_NAME
     os.environ["GPT4ALL_NO_CUDA"] = "1"
     orig_stderr = os.dup(2)
@@ -67,7 +85,7 @@ def Get_resumen(texto):
         "A continuación se presenta un texto. Haz un resumen conciso extrayendo SOLO las ideas principales, "
         "sin interpretaciones personales ni explicaciones subjetivas. "
         "Escribe el resumen en español claro y sin adornos. No incluyas ningún comentario adicional. "
-        "No empieces con frases como 'el texto trata sobre' o 'en resumen'. Solo devuelve el resumen en español y codificado en UTF-8. "
+        "No empieces con frases como 'el texto trata sobre' o 'en resumen'. SOLO devuelve el resumen en español y codificado en UTF-8. "
         "Texto:\n" + str(texto) + "\n####"
     )
     

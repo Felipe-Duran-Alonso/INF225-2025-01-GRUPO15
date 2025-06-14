@@ -8,20 +8,20 @@
     <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
 </head>
 
-<h1>Ingrese la nueva fuente de informacion</h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">Ingrese la nueva fuente de informacion</h1>
 <form method='POST'>
     {% csrf_token %}
     <div class="form-group">
-        <label for="{{ formulario.enlace.id_for_label }}">Enlace a la fuente</label>
+        <label for="{{ formulario.enlace.id_for_label }}" style="font-weight: bold; color: green;">Enlace a la fuente: </label>
         {{ formulario.enlace }}
     </div>
-    <button type="submit" class="btn-submit">Guardar</button>
+    <button class="btn-invisible" type="submit">✅ Guardar</button>
     <input type="hidden" name="ingresar" value="1">
 </form>
 
 {% if user.is_superuser %}
 
-<h1>Modificar estado de las fuentes</h1>
+<br><h2 style="font-weight: bold; color: green;">Modificar estado de las fuentes</h2>
 
 
 <table border = "1">
@@ -36,7 +36,19 @@
     {% for fuente in fuentes %}
 
                 <tr>
-                    <td>{{fuente.enlace}}</td>
+                    <td>
+                    <div style= "font-weight: bold; color: green; text-align: center;">
+                        {% if "http" in fuente.enlace %}
+                        <a href="{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                            {{ fuente.enlace }}
+                        </a>
+                        {% else %}
+                        <a href="https://{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                            {{ fuente.enlace }}
+                        </a>
+                        {% endif %}
+                    </div>
+                    </td>
             {% if fuente.estado == 1 %} 
                     <td>Activo</td>               
                     <td>

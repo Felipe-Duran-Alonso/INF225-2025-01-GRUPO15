@@ -1,0 +1,146 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<h1 style="font-weight: bold; color: green; text-align: center;">
+    Resumenes ingresados
+</h1>
+<table border = "1">
+    <thead>
+        <tr>
+            <th><h2>Fuente asociada</h2></th>
+            <th><h2>Resumen</h2></th>
+            <th><h2>Etiquetas</h2></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for resumen in resumenes %}
+                <tr>
+                    <td>
+                        <div style= "font-weight: bold; color: green; text-align: center;">
+                            {% if "http" in resumen.resumen.fuente %}
+                            <a href="{{ resumen.resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ resumen.resumen.fuente }}
+                            </a>
+                            {% else %}
+                            <a href="https://{{ resumen.resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ resumen.resumen.fuente }}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <form method="post">
+                            <label style="font-weight: bold; color: green;">
+                                Modifique el resumen:
+                            </label><br>
+                            {% csrf_token %}
+                            {{ resumen.resumen.resumen|safe|json_script:"textoJSON" }}
+                            <div id="toolbar">
+                            <button class="ql-bold" title="Bold"></button>
+                            <button class="ql-italic" title="Italic"></button>
+                            <button class="ql-underline" title="Underline"></button>
+                            <button class="ql-link" title="Link"></button>
+                            <button class="ql-list" value="ordered" title="Ordered List"></button>
+                            <button class="ql-list" value="bullet" title="Bullet List"></button>
+                            </div>
+                            <div id="editor-container" style="height: 300px; border: 1px solid #ccc;
+                            padding: 10px;">
+                            </div>
+                            <input type="hidden" name="contenido" id="contenido">
+                            <input type="hidden" name="resumen_id" value="{{ resumen.resumen.id }}">
+                            <input type="hidden" name="modo" id="modo" value="1">
+                            <button class="btn-invisible" type="submit">✅ Modificar</button>
+                        </form>
+                        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                        <script>
+                            const quill = new Quill('#editor-container', {
+                            modules: { toolbar: '#toolbar' },
+                            theme: 'snow'
+                            });
+                            const initialHtml = JSON.parse(document.getElementById('textoJSON').textContent);
+                            quill.root.innerHTML = initialHtml;
+                            document.querySelector('form').onsubmit = function() {
+                            document.getElementById('contenido').value = quill.root.innerHTML;
+                            };
+                        </script>
+                    </td>
+
+                    <td>
+                        <form method="POST">
+                        {% csrf_token %}
+                            <label style="font-weight: bold; color: green;">
+                                Modifique el uso actual:
+                            </label><br>
+                        {% if resumen.resumen.estado == 1 %}
+                            <input type="hidden" name="resumen_id" value="{{ resumen.resumen.id }}">
+                            <input type="hidden" name="new_estado" id="new_estado" value="0">
+                            <input type="hidden" name="modo" id="modo" value="2">
+                            <button class="btn-invisible" type="submit">🟨 Deshabilitar</button>
+
+                        {% else %}
+                            <input type="hidden" name="resumen_id" value="{{ resumen.resumen.id }}">
+                            <input type="hidden" name="new_estado" id="new_estado" value="1">
+                            <input type="hidden" name="modo" id="modo" value="2">
+                            <button class="btn-invisible" type="submit">🟩 Habilitar</button>
+                        {% endif %}
+                        </form>
+
+                        <form method="POST">
+                        {% csrf_token %}
+                        <label for="etiquetas-{{ forloop.counter }}" style="font-weight: bold; color: green;">
+                            Etiquetas:
+                        </label><br>
+                        <d>(Presione 'Enter' cada vez que introduzca una etiqueta personalizada.)</d>
+                        <select
+                            name="etiquetas[]"
+                            id="etiquetas-{{ forloop.counter }}"
+                            multiple="multiple"
+                            class="etiquetas-select"
+                            style="width: 100%;"
+                        >
+                            {% for etiqueta in etiquetas_t %}
+                            <option
+                                value="{{ etiqueta }}"
+                                {% if etiqueta in resumen.etiquetas %}selected{% endif %}
+                            >{{ etiqueta }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="resumen_id" value="{{ resumen.resumen.id }}">
+                        <input type="hidden" name="modo" id="modo" value="0">
+                        <button class="btn-invisible" type="submit">✅ Guardar etiquetas</button>
+                        </form>
+
+                        <form method="POST">
+                        {% csrf_token %}
+                        <label style="font-weight: bold; color: green;">
+                            Elimine el resumen de la base de datos:
+                        </label><br>
+                        <input type="hidden" name="resumen_id" value="{{ resumen.resumen.id }}">
+                        <input type="hidden" name="modo" id="modo" value="-1">
+                        <button class="btn-invisible" type="submit">❌ Borrar</button>
+                        </form>
+                    </td>     
+                </tr>       
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+  $(document).ready(function() {
+    $('.etiquetas-select').select2({
+      tags: true,
+      tokenSeparators: [',', ' '],
+      placeholder: "Escribe etiquetas y presiona Enter"
+    });
+  });
+</script>
+{% endblock %}

@@ -3,10 +3,62 @@ from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from myapp import models
 from django.http import HttpResponse
+from bs4 import BeautifulSoup
+from readability import Document
 
 URL_API_MAKE= "https://hook.us2.make.com/ci44onvom40qefynfkctvslihak0w4do" ## API para formatear los requerimientos con chatGPT
 ACTIVACION_API_MAKE = False #Activacion de la API, Si esta desactivada no se formatean los datos. De lo contrario si.
 #ID_SUPER_USUARIO = 1
+
+def quitar_etiquetas_bs(html: str) -> str:
+    soup = BeautifulSoup(html, "lxml")
+    etiquetas_borrar = ["script", "style", "noscript", "header", "footer", "iframe"]
+    for tag_name in etiquetas_borrar:
+        for tag in soup.find_all(tag_name):
+            try:
+                tag.decompose()  # elimina el nodo del árbol
+            except Exception as e:
+                print(f"No pude eliminar <{tag_name}>: {e!r}")
+    return soup.get_text(separator=" ", strip=True)
+
+def Scraper_fuente(url, usar_readability=False):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; ScraperGenérico/1.0)",
+        "Accept-Language": "es-ES,es;q=0.9"
+    }
+    readability_disponible = True
+    try:
+        respuesta = requests.get(url, headers=headers, timeout=10)
+        respuesta.raise_for_status()
+    except requests.RequestException as e:
+        raise RuntimeError(f"No se pudo obtener la URL ({e})")
+
+    html = respuesta.text
+    #print(html)
+    # Extraer contenido principal si se desea y si readability está disponible
+    if usar_readability and readability_disponible:
+        doc = Document(html)
+        html = doc.summary()  # HTML solo del contenido principal
+
+    # Parsear HTML con BeautifulSoup
+    soup = quitar_etiquetas_bs(html)
+    # Eliminar elementos no deseados
+    """
+    for tag in soup(["script", "style", "noscript", "header", "footer", "iframe"]):
+        tag.decompose()
+    print("\n\n\n\n\n\n\n\n??????????????????????????????????????????????????????")    
+    """
+    # Extraer texto visible
+    #print(soup)
+    """
+    texto_completo = soup.get_text(separator="\n")
+    lineas = [line.strip() for line in texto_completo.splitlines()]
+    lineas = [line for line in lineas if line]
+    texto_limpio = "\n".join(lineas)
+    #print(texto_limpio)   
+    return texto_limpio  
+    """
+    return soup
 
 
 def evaluar_insersion(request, Requerimientos_dict):

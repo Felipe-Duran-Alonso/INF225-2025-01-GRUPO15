@@ -1,0 +1,90 @@
+{% extends 'menu.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/estilo_formulario_requerimiento.css' %}">
+    <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
+</head>
+{% if vista == 1 %}
+  <h1 style="font-weight: bold; color: green; text-align: center;">Envie el texto que desea resumir</h1>
+  <div> Notar que una vez enviado debe esperar dentro de la misma pagina para esperar la respuesta (Por motivos de testing).</div> 
+  <div> En caso de no indicar la fuente se genara el resumen pero no se almacenara en la base de datos.</div> 
+
+  <!--Nuevo-->
+  {%if error_largo %}
+      <div style="color: red; font-weight: bold;">
+          El texto enviado es demasiado largo. Por favor, envíe un texto más corto.
+      </div>
+  {% endif %}
+
+  <form method='GET'>
+      {% csrf_token %}
+      <div class="form-group">
+          <label for="fuente" style="font-weight: bold; color: green;">Fuente: </label><br>
+          <select name="fuente" id="fuente" style="padding: 5px; border-radius: 5px; border: 2px solid black;">
+          <option value="aaa">---------</option>
+          {% for fuente in fuentes %}
+              <option value="{{ fuente.id }}">{{ fuente.enlace }}</option>
+          {% endfor %}
+          </select>
+      </div>
+      <button type="submit" class="btn-submit">✅ Scrapear</button>
+  </form>
+{% endif %}
+{% if vista == 4 %}
+    <h1 style="font-weight: bold; color: green; text-align: center;">Resumen generado mediante IA.</h1>
+    <div>{{ resumen }}</div>
+{% endif %}
+{% if vista == 3 %}
+    <h1 style="font-weight: bold; color: green; text-align: center;">Texto obtenido de la fuente</h1>
+  <form method="post">
+    <label  style="font-weight: bold; color: green;">Modifique el texto que se desea resumir</label>
+    {% csrf_token %}
+    {{ scrap|safe|json_script:"textoJSON" }}
+    <div id="toolbar">
+      <button class="ql-bold" title="Bold"></button>
+      <button class="ql-italic" title="Italic"></button>
+      <button class="ql-underline" title="Underline"></button>
+      <button class="ql-link" title="Link"></button>
+      <button class="ql-list" value="ordered" title="Ordered List"></button>
+      <button class="ql-list" value="bullet" title="Bullet List"></button>
+    </div>
+    <div id="editor-container" style="height: 300px; border: 1px solid #ccc;
+      padding: 10px;">
+    </div>
+    <input type="hidden" name="contenido" id="contenido">
+    <input type="hidden" name="url" id="url" value="{{ url }}">
+    <button class="btn-invisible" type="submit">Resumir</button>
+    <div>En caso de necesitar consultar: </div>
+    <div style= "font-weight: bold; color: green; text-align: center;">
+        {% if "http" in url %}
+          <a href="{{ url }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+            {{ url }}
+          </a>
+        {% else %}
+          <a href="https://{{ url }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+            {{ url }}
+          </a>
+        {% endif %}
+      </div>
+
+
+  </form>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script>
+    const quill = new Quill('#editor-container', {
+      modules: { toolbar: '#toolbar' },
+      theme: 'snow'
+    });
+    const initialHtml = JSON.parse(document.getElementById('textoJSON').textContent);
+    quill.root.innerHTML = initialHtml;
+    document.querySelector('form').onsubmit = function() {
+      document.getElementById('contenido').value = quill.root.innerHTML;
+    };
+  </script>
+{% endif %}
+{% endblock %}

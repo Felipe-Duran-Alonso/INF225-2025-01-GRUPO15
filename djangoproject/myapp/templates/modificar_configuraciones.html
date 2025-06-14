@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
 </head>
-<h1>⚙️ Modifique el campo que desea cambiar ⚙️</h1>
+<h1  style="font-weight: bold; color: green; text-align: center;">⚙️ Modifique el campo que desea cambiar ⚙️</h1>
 <br>
-<h2>Cambiar estado de la API de MAKE</h2>
+<h2 style="font-weight: bold; color: green;">Cambiar estado de la API de MAKE</h2>
 <p>Formateo de requerimientos a la hora de ingresarlos o modificarlos</p>
 {% if ACTIVACION_API_MAKE %}
     <form method="post">
@@ -28,7 +28,7 @@
 {% endif %}
 <br>
 
-<h2>Sincronizar estado de los requerimientos</h2>
+<h2 style="font-weight: bold; color: green;">Sincronizar estado de los requerimientos</h2>
 <p>Marca los boletines como listos, en caso de que se hayan subido manualmente</p>
 <form method="post">
     {% csrf_token %}
@@ -38,7 +38,7 @@
 
 <br>
 {% if user.is_superuser %}
-    <h2>Lista de usuarios</h2>
+    <h2  style="font-weight: bold; color: green;">Lista de usuarios</h2>
     <p>Modifique el estado de activacion o nivel de acceso de los usuarios</p>
     <table border = "1">
         <thead>

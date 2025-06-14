@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
 </head>
-<h1>
-    Requerimientos ingresados (sin procesar aún)
-</h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">Requerimientos</h1>
+<br><h2 style="font-weight: bold; color: green;">
+    Ingresados (sin procesar aún)
+</h2>
 {% if cant_registrados == 0 %}
     <p>❌ No hay requerimientos de este tipo ❌</p>
 {% else %}
@@ -35,9 +36,9 @@
     </table>
 {% endif %}
 
-<h1>
-    Requerimientos en proceso (se esta confeccionando un boletin con estos)
-</h1>
+<h2  style="font-weight: bold; color: green;">
+    En proceso (se esta confeccionando un boletin con estos)
+</h2>
 {% if cant_pendientes == 0 %}
     <p>❌ No hay requerimientos de este tipo ❌</p>
 {% else %}
@@ -63,9 +64,9 @@
     </table>
 {% endif %}
 
-<h1>
-    Requerimientos que ya tienen boletin
-</h1>
+<h2  style="font-weight: bold; color: green;">
+    Con boletin asociado
+</h2>
 {% if cant_listo == 0 %}
     <p>❌ No hay requerimientos de este tipo ❌</p>
 {% else %}

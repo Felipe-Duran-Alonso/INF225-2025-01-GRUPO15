@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
 </head>
-<h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">
     Boletines publicos
 </h1>
 <table border = "1">
@@ -40,7 +40,7 @@
                             <input type="hidden" name="boletin_id" value="{{boletin.id}}">
                             
                             <div class="form-group">
-                                <label for="formato_descarga">Descargar como:</label>
+                                <label for="formato_descarga" style="font-weight: bold; color: green;">Formato: </label>
                                 <select name="descargar_formato" id="formato_descarga" class="form-control" required>
                                     <option value="" disabled selected>Seleccione un formato</option>
                                     <option value="pdf">PDF</option>
@@ -48,7 +48,7 @@
                                     <option value="docx">DOCX</option>
                                 </select>
                             </div>
-                            <button class="btn btn-primary" type="submit" name="accion" value="descargar">Descargar</button>
+                            <button class="btn-invisible" type="submit" name="accion" value="descargar">Descargar</button>
                         </form>
                         
                         <br>
@@ -60,7 +60,7 @@
                             <input type="hidden" name="boletin_id" value="{{boletin.id}}">
                         
                             <div class="form-group">
-                                <label for="formato_email">Mandar por email como:</label>
+                                <label for="formato_email" style="font-weight: bold; color: green;">Mandar por email como: </label>
                                 <select name="email_formato" id="formato_email" class="form-control" required>
                                     <option value="" disabled selected>Seleccione un formato</option>
                                     <option value="pdf">PDF</option>
@@ -71,11 +71,11 @@
                         
                             <!-- Campo para ingresar el correo -->
                             <div class="form-group mt-2">
-                                <label for="email_destinatario">Correo del destinatario:</label>
+                                <label for="email_destinatario" style="font-weight: bold; color: green;">Correo del destinatario: </label>
                                 <input type="email" name="email_destinatario" id="email_destinatario" class="form-control" placeholder="ejemplo@correo.com" required>
                             </div>
                         
-                            <button class="btn btn-primary mt-3" type="submit" name="accion" value="enviar">Enviar</button>
+                            <button class="btn-invisible" type="submit" name="accion" value="enviar">Enviar</button>
                         </form>
                     </td>
                 </tr>

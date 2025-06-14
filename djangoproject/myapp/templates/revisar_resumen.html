@@ -10,8 +10,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
-<h1>
-    Resumenes
+<h1 style="font-weight: bold; color: green; text-align: center;">
+    Resumenes por etiquetar
 </h1>
 <d>Presione Enter cada vez que introduzca una etiqueta personalizada.</d>
 <table border = "1">
@@ -25,7 +25,19 @@
     <tbody>
     {% for resumen in resumenes %}
                 <tr>
-                    <td>{{resumen.fuente}}</td>
+                    <td>
+                        <div style= "font-weight: bold; color: green; text-align: center;">
+                            {% if "http" in resumen.fuente %}
+                            <a href="{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ resumen.fuente }}
+                            </a>
+                            {% else %}
+                            <a href="https://{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ resumen.fuente }}
+                            </a>
+                            {% endif %}
+                        </div>                    
+                    </td>
                     <td>{{resumen.resumen}}</td>
                     <td>
                         <form method="POST">

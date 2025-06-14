@@ -2,9 +2,9 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<h1>Bienvenido, {{ user.username }}</h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">Bienvenido, {{ user.username }}</h1>
 {% else %}
-<h1>Bienvenido</h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">Bienvenido</h1>
 {% endif %}
 {% load static %}
     <div class="image-container">

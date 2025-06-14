@@ -358,6 +358,37 @@ def resumir_texto(request):
             registro.save()
         return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})
     
+def resumir_texto1(request):
+    sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
+    if request.method==('GET'):
+        try:
+            print("ENTRE")
+            fuente = str(request.GET['fuente'])
+            obj_fuente = models.Fuente.objects.get(pk=fuente)
+            print("FUENTE:",obj_fuente.enlace)
+            url = obj_fuente.enlace
+            print("Voy a entrar al scraper")
+            scrap = Scraper_fuente(url)
+            print("Sali del scraper")
+            print(scrap)
+            return render(request, 'resumir_texto1.html',{'vista': 3,"fuentes":sin_resumen,"scrap":scrap,"url":url})            
+        except:
+            return render(request, 'resumir_texto1.html',{'vista': 1,"fuentes":sin_resumen})
+    else:
+        texto = str(request.POST['contenido'])
+        fuente = str(request.POST['url'])
+        resumen = Get_resumen(texto)
+        
+        #Caso que supera el límite -> Texto muy largo.
+        if resumen == -1:
+            return render(request, 'resumir_texto1.html',{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
+        
+        if fuente != "aaa":
+            obj_fuente = models.Fuente.objects.get(enlace=fuente)
+            registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
+            registro.save()
+        return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})
+
 def revisar_resumen(request):
     if request.method==('GET'):
         etiquetas_totales = set()
@@ -380,3 +411,58 @@ def revisar_resumen(request):
         obj_resumen.etiquetas = json.dumps(etiquetas)
         obj_resumen.save()
         return redirect('revisar_resumen') 
+    
+def editar_resumen(request):
+    if request.method==('GET'):
+        resumenes = models.Resumen.objects.filter(estado__in=[0, 1])
+        etiquetas_totales = set()
+        resumenes_con_etiquetas = []
+        for resumen in resumenes:
+            try:
+                etiquetas = json.loads(resumen.etiquetas)
+            except (TypeError, json.JSONDecodeError):
+                etiquetas = []
+            
+            resumenes_con_etiquetas.append({
+                'resumen': resumen,
+                'etiquetas': etiquetas
+            })
+
+            try:
+                etiquetas = json.loads(resumen.etiquetas)
+                etiquetas_totales.update(etiquetas)
+            except json.JSONDecodeError:
+                continue    
+        return render(request, 'editar_resumen.html', {"resumenes": resumenes_con_etiquetas,"etiquetas_t":etiquetas_totales})              
+    else:
+        modo = int(request.POST['modo'])
+        resumen_id = str(request.POST['resumen_id'])
+        obj_resumen = models.Resumen.objects.get(pk=resumen_id)
+        print(modo)
+        if modo == 2: #Editar estado
+            print("ENTRE")
+            new_estado = int(request.POST['new_estado'])
+            obj_resumen.estado = new_estado
+            obj_resumen.save()
+        elif modo == 1: #Edicion del resumen
+            contenido = quitar_etiquetas_bs(request.POST['contenido'])
+            obj_resumen.resumen = contenido
+            obj_resumen.save()
+        elif modo ==0:  #Editar etiquetas
+            etiquetas = request.POST.getlist('etiquetas[]')
+            obj_resumen.etiquetas = json.dumps(etiquetas)
+            obj_resumen.save()
+        elif modo ==-1: #Borrar resumen
+            obj_resumen.delete()
+        return redirect('editar_resumen')           
+
+
+        
+
+
+        
+
+
+
+
+

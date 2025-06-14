@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="{% static 'css/estilo_tablas.css' %}">
     <link rel="stylesheet" href="{% static 'css/estilo_formulario_boletin_aux.css' %}">
 </head>
-<h1>
+<h1 style="font-weight: bold; color: green; text-align: center;">Estadisticas boletines<h1>
+<h2 style="font-weight: bold; color: green; ">
     Boletines publicos
-</h1>
+</h2>
 {% if cant_publicos == 0 %}
     <p>❌ No hay boletines en este estado ❌</p>
 {% else %}
@@ -65,9 +66,9 @@
         <button type="submit" class="btn-submit">Ver boletines ocultos</button>
     </form>
 {% else %}
-    <h1>
+    <h2 style="font-weight: bold; color: green; ">
         Boletines ocultos
-    </h1>
+    </h2>
     {% if cant_ocultos == 0 %}
         <p>❌ No hay boletines en este estado ❌</p>
     {% else %}
