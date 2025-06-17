@@ -363,15 +363,15 @@ def resumir_texto1(request):
     sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
     if request.method==('GET'):
         try:
-            print("ENTRE")
+            #print("ENTRE")
             fuente = str(request.GET['fuente'])
             obj_fuente = models.Fuente.objects.get(pk=fuente)
-            print("FUENTE:",obj_fuente.enlace)
+            #print("FUENTE:",obj_fuente.enlace)
             url = obj_fuente.enlace
-            print("Voy a entrar al scraper")
+            #print("Voy a entrar al scraper")
             scrap = Scraper_fuente(url)
-            print("Sali del scraper")
-            print(scrap)
+            #print("Sali del scraper")
+            #print(scrap)
             return render(request, CREAR_RESUMEN,{'vista': 3,"fuentes":sin_resumen,"scrap":scrap,"url":url})            
         except:
             return render(request, CREAR_RESUMEN,{'vista': 1,"fuentes":sin_resumen})
@@ -439,9 +439,9 @@ def editar_resumen(request):
         modo = int(request.POST['modo'])
         resumen_id = str(request.POST['resumen_id'])
         obj_resumen = models.Resumen.objects.get(pk=resumen_id)
-        print(modo)
+        #print(modo)
         if modo == 2: #Editar estado
-            print("ENTRE")
+            #print("ENTRE")
             new_estado = int(request.POST['new_estado'])
             obj_resumen.estado = new_estado
             obj_resumen.save()

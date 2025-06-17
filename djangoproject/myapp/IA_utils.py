@@ -1,4 +1,4 @@
-import os, sys
+import os, time
 from gpt4all import GPT4All
 from textwrap import wrap
 
@@ -9,7 +9,8 @@ from huggingface_hub import snapshot_download
 #MODEL_DIR  = r"C:\Users\felid\.cache\huggingface\hub\models--QuantFactory--Meta-Llama-3-8B-Instruct-GGUF\snapshots\86e0c07efa3f1b6f06ea13e31b1e930dce865ae4"
 #MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"
 home_dir = os.path.expanduser("~")
-
+MAX_INTENTOS = 10
+INTERVAL = 5
 # Construye el path completo al modelo de forma portable
 MODEL_DIR = os.path.join(
     home_dir,
@@ -95,8 +96,8 @@ def Get_resumen_aux(texto):
         print("TEXTO MUY LARGO")
         return -1
     
-    flag = True
-    while(flag):
+    num_intentos = 0
+    while(num_intentos<MAX_INTENTOS):
         try:
             with modelo.chat_session():
                 salida = modelo.generate(
@@ -104,9 +105,12 @@ def Get_resumen_aux(texto):
                     max_tokens=500, 
                     temp=0.75
                 )
-            flag=False
-        except:
-            continue
+            break
+        except Exception as e:  
+            num_intentos += 1
+            print(f"Ocurrió un error generando el resumen (intento {num_intentos}): {e}")
+            print(f"   Se volvera a intentar en {INTERVAL} segundos")
+            time.sleep(INTERVAL)
 
     respuesta = salida.split("####")[0].strip()
     return respuesta.encode("cp1252", errors="ignore").decode("cp1252")
