@@ -5,7 +5,7 @@ from myapp import models
 from django.http import HttpResponse
 from bs4 import BeautifulSoup
 from readability import Document
-
+from .templates_names import *
 URL_API_MAKE= "https://hook.us2.make.com/ci44onvom40qefynfkctvslihak0w4do" ## API para formatear los requerimientos con chatGPT
 ACTIVACION_API_MAKE = False #Activacion de la API, Si esta desactivada no se formatean los datos. De lo contrario si.
 #ID_SUPER_USUARIO = 1
@@ -76,7 +76,7 @@ def evaluar_insersion(request, Requerimientos_dict):
         dict["Descripcion_nuevo"] = datos["Descripcion"]
         dict["Error"] = 0
         models.Requerimiento.objects.create(objetivo=dict["Objetivo_nuevo"],descripcion=dict["Descripcion_nuevo"],regiones=dict["Regiones_nuevo"],estados=0)
-        return render(request, 'insertar_requerimientos.html', dict)
+        return render(request, CREAR_REQUERIMIENTO, dict)
     else:
         try:
             # Hacer la solicitud POST a la API
@@ -111,7 +111,7 @@ def evaluar_insersion(request, Requerimientos_dict):
             if (dict["Error"] == 0): #Solo se inserta si los datos son correctos
                 models.Requerimiento.objects.create(objetivo=dict["Objetivo_nuevo"],descripcion=dict["Descripcion_nuevo"],regiones=dict["Regiones_nuevo"],estados=0)
             # Pasar los datos procesados al contexto de una plantilla
-            return render(request, 'insertar_requerimientos.html', respuesta)
+            return render(request, CREAR_REQUERIMIENTO, respuesta)
 
         except requests.exceptions.RequestException as e:
             # En caso de error, puedes manejarlo y mostrar un mensaje de error en la plantilla
@@ -121,7 +121,7 @@ def evaluar_insersion(request, Requerimientos_dict):
                 "Descripcion_nuevo":-1,
                 "Error":str(e)
             }
-            return render(request, 'insertar_requerimientos.html', respuesta)
+            return render(request, CREAR_REQUERIMIENTO, respuesta)
 
 def evaluar_modificacion(request, Requerimiento_dict):
     Requerimiento = models.Requerimiento.objects.get(id = Requerimiento_dict["Id"])
@@ -142,7 +142,7 @@ def evaluar_modificacion(request, Requerimiento_dict):
                     dict["lugar"] = 0
                     dict["editar_obj"] = 1
                     dict["req_id"] = Requerimiento_dict["Id"]
-                    return render(request, 'editar_requerimientos_aux.html', dict)
+                    return render(request, EDITAR_REQUERIMIENTO_AUX, dict)
                 # --------
                 
                 Requerimiento.objetivo = Requerimiento_dict["Objetivo"]
@@ -155,7 +155,7 @@ def evaluar_modificacion(request, Requerimiento_dict):
         dict["Descripcion_nuevo"] = Requerimiento.descripcion
         dict["Error"] = 0    
         dict["lugar"] = 1      
-        return render(request, 'editar_requerimientos_aux.html', dict)
+        return render(request, EDITAR_REQUERIMIENTO_AUX, dict)
     else:
         datos = {"Url":"Url"}#Modificar ya que aca recibira la respuesta
         if Requerimiento_dict["Regiones"] != "0" :
@@ -210,7 +210,7 @@ def evaluar_modificacion(request, Requerimiento_dict):
                 Requerimiento.descripcion = respuesta["Descripcion_nuevo"]
                 Requerimiento.save()
             # Pasar los datos procesados al contexto de una plantilla
-            return render(request, 'editar_requerimientos_aux.html', respuesta)
+            return render(request, EDITAR_REQUERIMIENTO_AUX, respuesta)
 
         except requests.exceptions.RequestException as e:
             # En caso de error, puedes manejarlo y mostrar un mensaje de error en la plantilla
@@ -221,7 +221,7 @@ def evaluar_modificacion(request, Requerimiento_dict):
                 "Error":str(e),
                 "lugar":1
             }
-            return render(request, 'editar_requerimientos_aux.html', respuesta)
+            return render(request, EDITAR_REQUERIMIENTO_AUX, respuesta)
         #Adaptar el manejo de la API
 
 def get_API_MAKE():

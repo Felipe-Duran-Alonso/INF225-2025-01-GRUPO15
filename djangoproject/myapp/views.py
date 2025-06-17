@@ -12,23 +12,24 @@ from .utils import *
 from django.contrib.auth.models import User
 from .permisos import *
 from .IA_utils import *
+from .templates_names import *
 from django.db.models import Count
 # Create your views here.
 
 def index(request):
-    return render(request, 'home.html') 
+    return render(request, HOME) 
 
 def registro(request):
-    return render(request, 'registro.html')
+    return render(request, REGISTRO)
 
 @login_required #Marcar vista que requiere inicio de sesion
 def ver_requerimientos(request):
-    return render(request, 'ver_requerimientos.html')
+    return render(request, VER_REQUERIMIENTO)
 
 @login_required #Marcar vista que requiere inicio de sesion
 def requerimientos(request):
     if request.method==('GET'):
-        return render(request, 'requerimientos.html',{'formulario': form.CreateRequerimiento()})
+        return render(request, REQUERIMIENTO,{'formulario': form.CreateRequerimiento()})
     else:
         objetivo=request.POST['objetivo']
         regiones=request.POST['regiones']
@@ -47,21 +48,21 @@ def get_requerimiento(request):
     cant_registrados=models.Requerimiento.objects.filter(estados=0).count()
     cant_pendientes=models.Requerimiento.objects.filter(estados=-1).count()
     requerimiento=models.Requerimiento.objects.all()
-    return render(request,'ver_requerimientos.html',{'Requerimiento': requerimiento,"cant_listo":cant_listo,"cant_registrados":cant_registrados,"cant_pendientes":cant_pendientes})
+    return render(request,VER_REQUERIMIENTO,{'Requerimiento': requerimiento,"cant_listo":cant_listo,"cant_registrados":cant_registrados,"cant_pendientes":cant_pendientes})
 
 def cerrar_sesion(request):
     logout(request)
-    return render(request,'home.html') 
+    return render(request,HOME) 
 
 def ver_boletines(request):
     boletines = models.Boletin.objects.all()
 
     if request.method == 'GET':
-        return render(request, 'ver_boletines.html', {'Boletin': boletines})
+        return render(request, VER_BOLETIN, {'Boletin': boletines})
 
     boletin_id = int(request.POST.get('boletin_id', -1))
     if boletin_id == -1:
-        return render(request, 'ver_boletines.html', {'Boletin': boletines})
+        return render(request, VER_BOLETIN, {'Boletin': boletines})
 
     boletin = models.Boletin.objects.get(id=boletin_id)
     accion = request.POST.get('accion', '')
@@ -136,10 +137,10 @@ def ver_boletines(request):
         except:
             mensaje = "❌ Error al enviar el boletín por correo."
 
-        return render(request, 'ver_boletines.html', {'Boletin': boletines, 'mensaje': mensaje})
+        return render(request, VER_BOLETIN, {'Boletin': boletines, 'mensaje': mensaje})
 
     # Por defecto, recargar la vista
-    return render(request, 'ver_boletines.html', {'Boletin': boletines})
+    return render(request, VER_BOLETIN, {'Boletin': boletines})
 
 
 @staff_required #Marcar vista que requiere estado staff
@@ -147,7 +148,7 @@ def editar_boletines(request):
     estados_requerimientos = ["Por procesar", "En proceso", "Finalizado"]
     boletines=models.Boletin.objects.all()
     if request.method==('GET'):
-        return render(request,'editar_boletines.html',{'Boletin': boletines})    
+        return render(request,EDITAR_BOLETIN,{'Boletin': boletines})    
     else:
         boletin_id=request.POST['boletin_id']
         lugar = int(request.POST['lugar'])
@@ -155,7 +156,7 @@ def editar_boletines(request):
             flag = int(request.POST['flag'])
             if flag==1:
                 boletin = models.Boletin.objects.get(id = boletin_id)
-                return render(request,'editar_boletines_aux.html',{'boletin_id': boletin_id, 'Boletin':boletin, 'requerimientos':models.Requerimiento.objects.all(),'mostrar':False, 'estados':estados_requerimientos})
+                return render(request,EDITAR_BOLETIN_AUX,{'boletin_id': boletin_id, 'Boletin':boletin, 'requerimientos':models.Requerimiento.objects.all(),'mostrar':False, 'estados':estados_requerimientos})
             else:
                 boletin_estado=request.POST['boletin_estado']
                 boletin_por_cambiar = models.Boletin.objects.get(id = boletin_id)
@@ -178,7 +179,7 @@ def editar_boletines(request):
                         requerimientos =  models.Requerimiento.objects.filter(estados=-1)
                     elif tipo == estados_requerimientos[2]: #LOS LISTOS
                         requerimientos =  models.Requerimiento.objects.filter(estados=1)
-                    return render(request,'editar_boletines_aux.html',{'boletin_id': boletin_id, 'Boletin':boletin, 'requerimientos':requerimientos,'mostrar':True, 'estados':estados_requerimientos})
+                    return render(request,EDITAR_BOLETIN_AUX,{'boletin_id': boletin_id, 'Boletin':boletin, 'requerimientos':requerimientos,'mostrar':True, 'estados':estados_requerimientos})
                 titulo = request.POST.get('titulo')
                 descripcion = request.POST.get('descripcion')
                 archivo_pdf = request.FILES.get('archivo_pdf')
@@ -197,7 +198,7 @@ def editar_boletines(request):
 @staff_required #Marcar vista que requiere estado staff
 def subir_boletines(request):
     if request.method==('GET'):
-        return render(request,'subir_boletines.html',{'form': form.CreateBoletin()})
+        return render(request,SUBIR_BOLETIN,{'form': form.CreateBoletin()})
     else:
         boletin_titulo=request.POST['titulo']
         boletin_desc=request.POST['descripcion']
@@ -213,7 +214,7 @@ def subir_boletines(request):
 def editar_requerimientos(request):
     requerimientos=models.Requerimiento.objects.all()
     if request.method==('GET'):
-        return render(request,'editar_requerimientos.html',{'Requerimiento': requerimientos})    
+        return render(request,EDITAR_REQUERIMIENTO,{'Requerimiento': requerimientos})    
     else:
         requerimiento_id=request.POST['requerimiento_id']
         requerimiento = models.Requerimiento.objects.get(id=requerimiento_id)
@@ -234,7 +235,7 @@ def editar_requerimientos(request):
                 requerimiento_editar_reg=int(request.POST['requerimiento_editar_reg'])
                 requerimiento_editar_obj=int(request.POST['requerimiento_editar_obj'])
                 requerimiento_editar_des=int(request.POST['requerimiento_editar_des'])
-                return render(request, 'editar_requerimientos_aux.html', {'req_id':requerimiento_id,'editar_reg':requerimiento_editar_reg,'editar_obj':requerimiento_editar_obj,'editar_des':requerimiento_editar_des,'Requerimiento':requerimiento,'lugar':0})
+                return render(request, EDITAR_REQUERIMIENTO_AUX, {'req_id':requerimiento_id,'editar_reg':requerimiento_editar_reg,'editar_obj':requerimiento_editar_obj,'editar_des':requerimiento_editar_des,'Requerimiento':requerimiento,'lugar':0})
 
 @superuser_required #Marcar vista que requiere ser super usuario
 def modificar_configuraciones(request):
@@ -242,7 +243,7 @@ def modificar_configuraciones(request):
     valores = [get_API_MAKE(), User.objects.all()] #Enumerar todos los valores que se quieren enviar al template
     dict = get_diccionario_nombre_valor(nombres,valores)
     if request.method==('GET'):
-        return render(request,'modificar_configuraciones.html',dict)
+        return render(request,CONFIGURACIONES,dict)
     else:
         retornos = {}
         flag = int(request.POST["flag"])
@@ -280,7 +281,7 @@ def modificar_configuraciones(request):
                     boletin.requerimiento.estados = 1
                     boletin.requerimiento.save()
             return redirect('ver_requerimientos')
-        return render(request,'modificar_configuraciones.html',dict)
+        return render(request,CONFIGURACIONES,dict)
 
 @staff_required #Marcar vista que requiere estado staff   
 def estadisticas_boletines(request):
@@ -315,15 +316,15 @@ def estadisticas_boletines(request):
     }
     if request.method==('GET'):
         dict['mostrar']=0
-        return render(request,'estadisticas_boletines.html',dict)
+        return render(request,ESTADISTICA_BOLETIN,dict)
     else:
         dict['mostrar']=int(request.POST["mostrar"])
-        return render(request,'estadisticas_boletines.html',dict)
+        return render(request,ESTADISTICA_BOLETIN,dict)
 
 @staff_required 
 def administrar_fuentes(request):
     if request.method == ('GET'):
-        return render(request, 'administrar_fuentes.html',{'formulario': form.CreateFuente(),'fuentes':models.Fuente.objects.all()})
+        return render(request, ADMINISTRAR_FUENTE,{'formulario': form.CreateFuente(),'fuentes':models.Fuente.objects.all()})
     else:
         if int(request.POST['ingresar']) == 1:
             enlace=request.POST['enlace']
@@ -342,7 +343,7 @@ def administrar_fuentes(request):
 def resumir_texto(request):
     sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
     if request.method==('GET'):
-        return render(request, 'resumir_texto.html',{'vista': 1,"fuentes":sin_resumen})
+        return render(request, CREAR_RESUMEN_OLD,{'vista': 1,"fuentes":sin_resumen})
     else:
         texto = str(request.POST['texto'])
         fuente = str(request.POST['fuente'])
@@ -350,13 +351,13 @@ def resumir_texto(request):
         
         #Caso que supera el límite -> Texto muy largo.
         if resumen == -1:
-            return render(request, 'resumir_texto.html',{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
+            return render(request, CREAR_RESUMEN_OLD,{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
         
         if fuente != "aaa":
             obj_fuente = models.Fuente.objects.get(pk=fuente)
             registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
             registro.save()
-        return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})
+        return render(request, CREAR_RESUMEN_OLD,{'vista': 0,'resumen':resumen})
     
 def resumir_texto1(request):
     sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
@@ -371,9 +372,9 @@ def resumir_texto1(request):
             scrap = Scraper_fuente(url)
             print("Sali del scraper")
             print(scrap)
-            return render(request, 'resumir_texto1.html',{'vista': 3,"fuentes":sin_resumen,"scrap":scrap,"url":url})            
+            return render(request, CREAR_RESUMEN,{'vista': 3,"fuentes":sin_resumen,"scrap":scrap,"url":url})            
         except:
-            return render(request, 'resumir_texto1.html',{'vista': 1,"fuentes":sin_resumen})
+            return render(request, CREAR_RESUMEN,{'vista': 1,"fuentes":sin_resumen})
     else:
         texto = str(request.POST['contenido'])
         fuente = str(request.POST['url'])
@@ -381,13 +382,13 @@ def resumir_texto1(request):
         
         #Caso que supera el límite -> Texto muy largo.
         if resumen == -1:
-            return render(request, 'resumir_texto1.html',{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
+            return render(request, CREAR_RESUMEN,{'vista': 1,"fuentes":sin_resumen,'error_largo':True})
         
         if fuente != "aaa":
             obj_fuente = models.Fuente.objects.get(enlace=fuente)
             registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
             registro.save()
-        return render(request, 'resumir_texto.html',{'vista': 0,'resumen':resumen})
+        return render(request, CREAR_RESUMEN,{'vista': 0,'resumen':resumen})
 
 def revisar_resumen(request):
     if request.method==('GET'):
@@ -402,7 +403,7 @@ def revisar_resumen(request):
 
         resumenes = models.Resumen.objects.filter(estado=-1)
 
-        return render(request, 'revisar_resumen.html',{'vista': 0,"resumenes":resumenes,"etiquetas":etiquetas_totales})
+        return render(request, REVISAR_RESUMEN,{'vista': 0,"resumenes":resumenes,"etiquetas":etiquetas_totales})
     else:
         id = str(request.POST['resumen_id'])
         obj_resumen = models.Resumen.objects.get(pk=id)
@@ -433,7 +434,7 @@ def editar_resumen(request):
                 etiquetas_totales.update(etiquetas)
             except json.JSONDecodeError:
                 continue    
-        return render(request, 'editar_resumen.html', {"resumenes": resumenes_con_etiquetas,"etiquetas_t":etiquetas_totales})              
+        return render(request, EDITAR_RESUMEN, {"resumenes": resumenes_con_etiquetas,"etiquetas_t":etiquetas_totales})              
     else:
         modo = int(request.POST['modo'])
         resumen_id = str(request.POST['resumen_id'])
