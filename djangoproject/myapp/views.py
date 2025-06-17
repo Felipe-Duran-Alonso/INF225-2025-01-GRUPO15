@@ -14,6 +14,7 @@ from .permisos import *
 from .IA_utils import *
 from .templates_names import *
 from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def index(request):
@@ -26,11 +27,13 @@ def registro(request):
 def ver_requerimientos(request):
     return render(request, VER_REQUERIMIENTO)
 
+@csrf_exempt
 @login_required #Marcar vista que requiere inicio de sesion
 def requerimientos(request):
     if request.method==('GET'):
         return render(request, REQUERIMIENTO,{'formulario': form.CreateRequerimiento()})
     else:
+        print(request.POST)
         objetivo=request.POST['objetivo']
         regiones=request.POST['regiones']
         descripcion=request.POST['descripcion']
@@ -54,6 +57,7 @@ def cerrar_sesion(request):
     logout(request)
     return render(request,HOME) 
 
+@csrf_exempt
 def ver_boletines(request):
     boletines = models.Boletin.objects.all()
 
@@ -359,8 +363,10 @@ def resumir_texto(request):
             registro.save()
         return render(request, CREAR_RESUMEN_OLD,{'vista': 0,'resumen':resumen})
     
+@csrf_exempt
 def resumir_texto1(request):
     sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
+    print(request.POST)
     if request.method==('GET'):
         try:
             #print("ENTRE")
