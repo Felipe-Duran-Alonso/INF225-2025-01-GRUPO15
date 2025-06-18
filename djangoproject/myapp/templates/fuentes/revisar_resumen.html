@@ -43,11 +43,11 @@
                         <form method="POST">
                             {% csrf_token %}
                             <label for="etiquetas" style="font-weight: bold; color: green;">Etiquetas:</label><br>
-                            <select name="etiquetas[]" id="etiquetas" multiple="multiple" class="etiquetas-select" style="width: 100%;">
-                                {% for etiqueta in etiquetas %}
-                                    <option value="{{ etiqueta }}">{{ etiqueta }}</option>
-                                {% endfor %}
-                            </select>
+                                <select name="etiquetas[]" class="etiquetas-select" multiple="multiple" style="width: 100%;">
+                                    {% for etiqueta in etiquetas %}
+                                        <option value="{{ etiqueta }}">{{ etiqueta }}</option>
+                                    {% endfor %}
+                                </select>
                             <input type="hidden" name="resumen_id" value="{{ resumen.id }}">
                            <button class="btn-invisible" type="submit">✅ Aprobar resumen</button>
                         </form>
@@ -57,12 +57,13 @@
     </tbody>
 </table>
 <script>
-    $(document).ready(function() {
-        $('.etiquetas-select').select2({
-            tags: true,
-            tokenSeparators: [',', ' '],
-            placeholder: "Escribe etiquetas y presiona Enter"
-        });
+  $(document).ready(function() {
+    $('.etiquetas-select').select2({
+      tags: true,
+      tokenSeparators: [',',' '],
+      placeholder: "Escribe etiquetas y presiona Enter",
+      dropdownParent: $(document.body)
     });
+  });
 </script>
 {% endblock %}
