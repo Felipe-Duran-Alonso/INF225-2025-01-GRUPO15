@@ -56,6 +56,8 @@ def Get_resumen(texto):
     for i, chunk in enumerate(chunks):
         response = Get_resumen_aux(chunk)
         #print("RESPONSE", response)
+        if resumen == -1:
+            return resumen
         resumen+=response + "\n"
     if len(chunks)>1:
         return Get_resumen_aux(resumen)
@@ -97,6 +99,7 @@ def Get_resumen_aux(texto):
         return -1
     
     num_intentos = 0
+    flag = True
     while(num_intentos<MAX_INTENTOS):
         try:
             with modelo.chat_session():
@@ -105,12 +108,15 @@ def Get_resumen_aux(texto):
                     max_tokens=500, 
                     temp=0.75
                 )
+            flag = True
             break
         except Exception as e:  
             num_intentos += 1
             print(f"Ocurrió un error generando el resumen (intento {num_intentos}): {e}")
             print(f"   Se volvera a intentar en {INTERVAL} segundos")
             time.sleep(INTERVAL)
-
+            flag = False
+    if not flag:
+        return -1
     respuesta = salida.split("####")[0].strip()
     return respuesta.encode("cp1252", errors="ignore").decode("cp1252")
