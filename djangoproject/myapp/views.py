@@ -366,7 +366,7 @@ def resumir_texto(request):
 @csrf_exempt
 def resumir_texto1(request):
     sin_resumen = models.Fuente.objects.annotate(num_resumenes=Count('resumen')).filter(num_resumenes=0, estado =1)
-    print(request.POST)
+    #print(request.POST)
     if request.method==('GET'):
         try:
             #print("ENTRE")

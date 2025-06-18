@@ -27,14 +27,14 @@
                 <tr>
                     <td>
                         <div style= "font-weight: bold; color: green; text-align: center;">
-                            {% if "http" in resumen.fuente %}
-                            <a href="{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
-                                {{ resumen.fuente }}
-                            </a>
+                            {% if resumen.fuente|slice:":7"|lower == 'http://' or resumen.fuente|slice:":8"|lower == 'https://' %}
+                                <a href="{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                    {{ resumen.fuente }}
+                                </a>
                             {% else %}
-                            <a href="https://{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
-                                {{ resumen.fuente }}
-                            </a>
+                                <a href="https://{{ resumen.fuente }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                    {{ resumen.fuente }}
+                                </a>
                             {% endif %}
                         </div>                    
                     </td>

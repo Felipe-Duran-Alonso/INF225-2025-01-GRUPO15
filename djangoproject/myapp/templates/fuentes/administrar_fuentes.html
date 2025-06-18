@@ -38,14 +38,14 @@
                 <tr>
                     <td>
                     <div style= "font-weight: bold; color: green; text-align: center;">
-                        {% if "http" in fuente.enlace %}
-                        <a href="{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
-                            {{ fuente.enlace }}
-                        </a>
+                        {% if fuente.enlace|slice:":7"|lower == 'http://' or fuente.enlace|slice:":8"|lower == 'https://' %}
+                            <a href="{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ fuente.enlace }}
+                            </a>
                         {% else %}
-                        <a href="https://{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
-                            {{ fuente.enlace }}
-                        </a>
+                            <a href="https://{{ fuente.enlace }}" target="_blank" rel="noopener noreferrer" style="color: green;">
+                                {{ fuente.enlace }}
+                            </a>
                         {% endif %}
                     </div>
                     </td>
