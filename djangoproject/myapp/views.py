@@ -394,6 +394,7 @@ def resumir_texto1(request):
             obj_fuente = models.Fuente.objects.get(enlace=fuente)
             registro = models.Resumen(fuente = obj_fuente,resumen = resumen)
             registro.save()
+            return redirect('revisar_resumen') 
         return render(request, CREAR_RESUMEN,{'vista': 0,'resumen':resumen})
 
 def revisar_resumen(request):
