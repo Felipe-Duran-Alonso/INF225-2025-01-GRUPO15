@@ -55,7 +55,7 @@ def Get_resumen(texto):
     resumen = ""
     for i, chunk in enumerate(chunks):
         response = Get_resumen_aux(chunk)
-        print("RESPONSE", response)
+        #print("RESPONSE", response)
         resumen+=response + "\n"
     if len(chunks)>1:
         return Get_resumen_aux(resumen)
