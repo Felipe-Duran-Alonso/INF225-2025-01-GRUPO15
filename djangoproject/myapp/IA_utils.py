@@ -45,7 +45,7 @@ def Contar_tokens(texto):
     print(f"CANTIDAD DE TOKENS: {len(input_ids)}")
     return len(input_ids)
 
-def split_text(text, max_tokens=1700):
+def split_text(text, max_tokens=1600):
     # Aproximación: 1 token ≈ 4 caracteres en promedio (esto varía)
     max_chars = max_tokens * 4
     return wrap(text, max_chars)
@@ -56,8 +56,8 @@ def Get_resumen(texto):
     for i, chunk in enumerate(chunks):
         response = Get_resumen_aux(chunk)
         #print("RESPONSE", response)
-        if resumen == -1:
-            return resumen
+        if response == -1:
+            return response
         resumen+=response + "\n"
     if len(chunks)>1:
         return Get_resumen_aux(resumen)
